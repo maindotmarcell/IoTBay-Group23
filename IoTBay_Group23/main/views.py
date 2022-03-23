@@ -7,8 +7,8 @@ from .models import Customer
 
 def index(response, id):
     cust = Customer.objects.get(id=id)
-    return HttpResponse(f"<h1>{cust.name}</h1>")
+    return render(response, "main/base.html", {})
 
 
-def v1(response):
-    return HttpResponse("<h1>View 1!</h1>")
+def home(response):
+    return render(response, "main/home.html", {})
