@@ -23,7 +23,9 @@ urlpatterns = [
     path('', include("main.urls")),
     path('home/', v.home, name="home"),
     path('', include("django.contrib.auth.urls")),
-    path('welcome/', v.welcome, name="welcome")
+    path('welcome/', v.welcome, name="welcome"),
+    path('main/', v.main, name="main"),
+    path('logout/', v.logout, name="logout")
 ]
 
 # /home/start

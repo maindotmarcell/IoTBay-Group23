@@ -4,8 +4,9 @@
 <h1>Welcome!</h1>
 <br>
 <h3>You are logged in as: {{name}}</h3><br>
-<p>Email: {{email}}</p><br>
-<p>Joined: {{joined}}</p>
+<!-- <p>Email: {{email}}</p><br> -->
+<p>Email: {{user.email}}</p>
+<p>Joined: {{user.date_joined}}</p>
 <br>
-<a href="/register">Register</a>
+<a href="/main">Main page</a>
 {% endblock %}
