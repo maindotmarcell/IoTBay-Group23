@@ -21,7 +21,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("register/", v.register, name="register"),
     path('', include("main.urls")),
-    path('home/', v.home, name="home")
+    path('home/', v.home, name="home"),
+    path('', include("django.contrib.auth.urls")),
+    path('welcome/', v.welcome, name="welcome")
 ]
 
 # /home/start

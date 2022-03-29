@@ -1,8 +1,9 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Customer
-from django.contrib.auth import login,authenticate
-from django.contrib.auth.forms import UserCreationForm 
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.models import User
+from .forms import RegisterForm
 
 # Create your views here.
 
@@ -18,12 +19,20 @@ def home(response):
 
 def register(response):
     if response.method == "POST":
-        form = UserCreationForm(response.POST)
+        form = RegisterForm(response.POST)
         if form.is_valid():
             form.save()
-
-        return redirect("/home")
+            return redirect("/welcome")
     else:
-        form = UserCreationForm()
+        form = RegisterForm()
 
     return render(response, "main/register.html", {"form": form})
+
+
+def welcome(response):
+    name =  response.user.username 
+    email =  response.user.email 
+    joined = response.user.date_joined
+    return render(
+        response, "main/welcome.html", {"name": name,"email": email, "joined": joined}
+    )
