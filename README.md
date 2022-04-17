@@ -13,11 +13,15 @@ pip install django-bootstrap-v5
 ```
 - Django crispy forms
 ```
-pip install djangocrispy-forms
+pip install django-crispy-forms
 ```
 
 ## How to run
-You need to enter into the IoTBay_Group23 directory (the innermost one) and type the following comand into your terminal:
+Enter into the IoTBay_Group23 directory (the innermost one):
+```
+cd IoTBay_Group23
+```
+Then type the following comand into your terminal:
 ```
 python manage.py runserver
 ```
@@ -27,4 +31,4 @@ You can then click on the IP and port combination it gives you and you'll see th
 
 - We need to reset the database completely and rewrite the models.py file so that we have everything from our data dictionary/ERD diagram. We also need to use properties from the built in User class, as foreign keys (and get rid of the Customer class I created). We will need to then drop all the tables in the SQLight database and import/migrate all the updated models back into the database (from that point we won't have anything to do with the DB, Django will take care of that).
 - We need to create an edit page, this should be very easy to do.
-- We need to find some content online that can give us a guide to create the list of products (and how to properly display them on the page).-
+- We need to find some content online that can give us a guide to create the list of products (and how to properly display them on the page).
