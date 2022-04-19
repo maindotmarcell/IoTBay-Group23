@@ -1,4 +1,11 @@
 # IoTBay
+
+
+## Disclaimer!!!
+Do **not** push anything to the main branch! Create your own branch and work on that. Otherwise we will have merge conflicts and it will be very hard and timely to fix it...
+Thanks!
+
+
 ## Start Here
 Here are a few notes that can help you guys  get up to speed with the application. I will be adding more stuff to this document. Make sure to check out the [video](https://www.youtube.com/watch?v=sm1mokevMWk&t=10777s) I followed to get the current application. 
 
