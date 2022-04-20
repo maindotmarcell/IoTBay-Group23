@@ -5,9 +5,6 @@ admin.site.register(Customer)
 admin.site.register(Item)
 admin.site.register(Order)
 admin.site.register(Payment)
-admin.site.register(Payment)
-#class adminOPayment(admin.ModelAdmin):
-#    pass
 
 admin.site.register(Invoice)
 
