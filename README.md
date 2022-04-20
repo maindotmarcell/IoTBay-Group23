@@ -1,4 +1,7 @@
 # IoTBay
+## Disclaimer!!!
+Do **not** push anything to the main branch! Create your own branch and work on that. Otherwise we will have merge conflicts and it will be very hard and timely to fix it...
+Thanks!
 ## Start Here
 Here are a few notes that can help you guys  get up to speed with the application. I will be adding more stuff to this document. Make sure to check out the [video](https://www.youtube.com/watch?v=sm1mokevMWk&t=10777s) I followed to get the current application. 
 
@@ -15,6 +18,38 @@ pip install django-bootstrap-v5
 ```
 pip install django-crispy-forms
 ```
+
+## Pushing to GitHub
+Open the terminal and make sure to create your branch with:
+```
+git branch yourname
+```
+And switch to that branch with:
+```
+git checkout yourname
+```
+Type in:
+```
+git status
+```
+This should give you the list of files you have changed.
+Once you have verified that nothing is out of place, you can add the changes to the "staging", like so:
+```
+git add .
+```
+(. meaning you add everything, you could also put a filename there alternatively if you don't want to add everything).
+Then you can create your commit like so:
+```
+git commit -m "insert message"
+```
+Once all your commits have been created (you can do multiple, but I usually just do one), you can push this to the GitHub:
+```
+git push origin marcell
+```
+Change marcell to whatever your branch name is.
+
+*You can use any other graphical method to commit, this is just how I do it, it's also the traditional and most common way*
+
 
 ## How to run
 Enter into the IoTBay_Group23 directory (the innermost one):
