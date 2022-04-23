@@ -56,7 +56,7 @@ Enter into the IoTBay_Group23 directory (the innermost one):
 ```
 cd IoTBay_Group23
 ```
-Then type the following comand into your terminal:
+Then type the following command into your terminal:
 ```
 python manage.py runserver
 ```

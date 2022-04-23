@@ -47,6 +47,3 @@ def logout(response):
     logout(response)
     return redirect("/home")
     
-
-def edit(response):
-    return render(response,"main/edit.html", {})
