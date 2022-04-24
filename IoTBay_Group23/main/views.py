@@ -48,6 +48,7 @@ def logout(response):
     return redirect("/home")
 
 
+
 def edit(response):
 
     if response.method == "POST":   
@@ -67,5 +68,5 @@ def edit(response):
 
     return render(response, "main/edit.html", context)
 
-    
-
+def resetpassword(response):
+    return render(response, "registration/reset_password_form.html", {})
