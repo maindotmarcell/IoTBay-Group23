@@ -1,0 +1,18 @@
+{% extends "main/base.html" %}
+
+{% block title %}Edit Account Information{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+ 
+<h1>Edit Account Information</h1>
+<br/> <br/>
+
+    <form method="POST" class="form-group">
+        {% csrf_token %}
+        {{user_form|crispy}}
+        <br>
+        <button type="submit" class="btn btn-success">Update</button>
+    </form>
+{%endblock%}
