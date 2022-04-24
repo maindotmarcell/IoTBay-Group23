@@ -66,3 +66,6 @@ def edit(response):
     }
 
     return render(response, "main/edit.html", context)
+
+    
+
