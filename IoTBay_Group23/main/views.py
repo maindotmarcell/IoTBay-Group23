@@ -1,10 +1,13 @@
+from profile import Profile
 from django.shortcuts import redirect, render
 from django.contrib import messages
 # from django.http import HttpResponse
 # from .models import Customer
 # from django.contrib.auth import login, authenticate, logout
-# from django.contrib.auth.models import User
-from .forms import RegisterForm, UpdateForm
+from django.contrib.auth.models import User
+from .forms import RegisterForm, UpdateForm, DeleteUserForm
+
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -68,5 +71,17 @@ def edit(response):
 
     return render(response, "main/edit.html", context)
 
-def resetpassword(response):
-    return render(response, "registration/reset_password_form.html", {})
+def confirmation (response):
+    return render(response, "Delete_Account/confirmation.html", {})
+
+def DeleteAccount(response):
+    if response.method == 'POST':
+        delete_form = DeleteUserForm(response.POST, instance = response.user)
+        response.user.delete()
+        #return redirect ("/login")
+        return redirect ("/confirmation")
+
+    else:
+        delete_form = DeleteUserForm(instance=response.user)
+        context = {'delete_form': delete_form}
+    return render(response, "Delete_Account/deleteaccount.html", context)
