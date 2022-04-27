@@ -68,10 +68,3 @@ def edit(response):
 
     return render(response, "main/edit.html", context)
 
-<<<<<<< HEAD
-def resetpassword(response):
-    return render(response, "registration/reset_password_form.html", {})
-=======
-    
-
->>>>>>> 4015ce1d21ef4ff79000f48b8bac81f7b4c999dc
