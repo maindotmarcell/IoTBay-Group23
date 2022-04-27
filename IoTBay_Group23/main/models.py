@@ -45,18 +45,18 @@ class Payment(models.Model):
 
 
 class Invoice(models.Model):
-    UserID = models.ForeignKey(User, on_delete=models.CASCADE)
-    PaymentID = models.ForeignKey(Payment, on_delete=models.CASCADE)
-    invoice_Number = models.CharField(max_length=100)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    payent = models.ForeignKey(Payment, on_delete=models.CASCADE)
+    invoice_number = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.invoice_Number
+        return self.invoice_number
 
 
 class Shipping(models.Model):
-    UserID = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    Tracking_Number = models.BigIntegerField(unique=True)
+    tracking_number = models.BigIntegerField(unique=True)
 
     def __str__(self):
-        return self.Tracking_Number
+        return self.tracking_number
