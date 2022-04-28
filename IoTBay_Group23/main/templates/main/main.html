@@ -2,7 +2,7 @@
 
 {% block content %}
 <h2>This is the main page!</h2>
-<p>Main page content will be displayed here...</p>
+<p>Main page content will be displayed here. Including products sold</p>
 <table class="table">
     <tr>
         <th>Username</th>
@@ -15,5 +15,8 @@
         <td>{{user.date_joined}}</td>
     </tr>
 </table>
-<p>Logout <a href="/logout">here</a>.</p>
+<br></br>
+<a class = 'btn btn-danger' style = "margin-top: 30px;" href = "/logout">Logout</a>
+<a class = 'btn btn-danger' style = "margin-top: 30px;" href="/edit">Edit Account Details</a>
+<a class = 'btn btn-danger' style = "margin-top: 30px;" href = "/deleteaccount">Delete Account</a>
 {% endblock %}
