@@ -30,7 +30,8 @@ urlpatterns = [
     path('edit/', v.edit, name="edit"),
     path('confirmation/', v.confirmation, name="confirmation"),
     path('deleteaccount/', v.DeleteAccount, name="deleteaccount"),
-    
+    path('cart/', v.cart, name="cart"),   
+    path('checkout/', v.checkout, name="checkout"),
     path('registration/', include('django.contrib.auth.urls')),
 
     #reset password path
