@@ -5,7 +5,7 @@ from django.contrib import messages
 # from .models import Customer
 # from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
-from .forms import RegisterForm, UpdateForm, DeleteUserForm
+from .forms import RegisterForm, UpdateForm, DeleteUserForm, StaffForm
 from .models import *
 from django.contrib.auth.decorators import login_required
 
@@ -95,3 +95,18 @@ def cart(response):
 
 def checkout(response):
     return render(response, "Order_Management/checkout.html")
+
+def staff_registration(response):
+    if response.user.is_superuser:
+        if response.method == "POST":
+            form = StaffForm(response.POST)
+            if form.is_valid():
+
+                form.save()
+
+
+                return redirect("/welcome")
+        else:
+            form = StaffForm()
+            context = {"form": form}
+        return render(response, "registration/staff_registration.html", context)

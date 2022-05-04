@@ -1,0 +1,15 @@
+{% extends "main/base.html" %}
+
+{% block title %}Staff Register{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <form method="POST" class="form-group">
+        {% csrf_token %}
+        {{form|crispy}}
+        <br>
+        <button type="submit" class="btn btn-success">Register User</button>
+
+    </form>
+{%endblock%}

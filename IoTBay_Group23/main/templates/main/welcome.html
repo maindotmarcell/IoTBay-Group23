@@ -14,4 +14,9 @@
 <a class = 'btn btn-danger' style = "margin-top: 30px;" href="/edit">Edit Account Details</a>
 <a class = 'btn btn-danger' style = "margin-top: 30px;" href = "/deleteaccount">Delete Account</a>
 <a class = 'btn btn-danger' style = "margin-top: 30px;" href = "/logout">Logout</a>
+
+{% if request.user.is_superuser %}
+<br>
+<a class = 'btn btn-dark' style = "margin-top: 30px;" href = "/staff_registration">Register User</a>
+{% endif %}
 {% endblock %}
