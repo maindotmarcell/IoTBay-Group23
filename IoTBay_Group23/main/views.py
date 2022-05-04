@@ -6,7 +6,7 @@ from django.contrib import messages
 # from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from .forms import RegisterForm, UpdateForm, DeleteUserForm
-
+from .models import *
 from django.contrib.auth.decorators import login_required
 
 
@@ -43,7 +43,9 @@ def welcome(response):
 
 
 def main(response):
-    return render(response, "main/main.html", {})
+    products = Item.objects.all()
+    context = {'products': products}
+    return render(response, "main/main.html", context) 
 
 
 def logout(response):
@@ -88,8 +90,8 @@ def DeleteAccount(response):
 
 
 def cart(response):
-    return render(response, "main/Order_Management/cart.html")
+    return render(response, "Order_Management/cart.html")
 
 
 def checkout(response):
-    return render(response, "main/Order_Management/checkout.html")
+    return render(response, "Order_Management/checkout.html")

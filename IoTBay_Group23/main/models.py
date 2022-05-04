@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
 
 # Create your models here.
 
@@ -21,6 +22,8 @@ from django.contrib.auth.models import User
 class Item(models.Model):
     name = models.CharField(max_length=100)
     stock_num = models.IntegerField()
+    price = models.FloatField(null=True)
+    image = models.ImageField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -38,7 +41,7 @@ class Order(models.Model):
 
 class Payment(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=7, decimal_places=2)
+    amount = models.DecimalField(max_digits=7, decimal_places=3)
 
     def __str__(self):
         return self.amount
@@ -57,6 +60,10 @@ class Shipping(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     tracking_number = models.BigIntegerField(unique=True)
+    address = models.CharField(max_length=200, null=True)
+    city = models.CharField(max_length=200, null=True)
+    postcode = models.IntegerField()
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.tracking_number
