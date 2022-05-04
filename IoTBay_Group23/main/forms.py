@@ -24,3 +24,14 @@ class DeleteUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = [] 
+
+class StaffForm(UserCreationForm):
+    email = forms.EmailField()
+
+    class Meta:
+
+        model = User
+        fields = ["username", "email", "password1", "password2", "is_staff"]
+    
+#is_staff 
+#"__all__"

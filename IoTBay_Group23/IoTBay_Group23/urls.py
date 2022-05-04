@@ -36,6 +36,9 @@ urlpatterns = [
     path('checkout/', v.checkout, name="checkout"),
     path('registration/', include('django.contrib.auth.urls')),
 
+    #staff registration
+    path('staff_registration/', v.staff_registration, name="staff_Registration"),
+
     #reset password path
     path('resetpassword/', auth_views.PasswordResetView.as_view(template_name='registration/resetpassword.html'), name = "reset_password"),
     path('resetpasswordsent/', auth_views.PasswordResetDoneView.as_view(template_name='registration/resetpasswordsent.html'), name = "password_reset_done"),
