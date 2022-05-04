@@ -88,8 +88,8 @@ def DeleteAccount(response):
 
 
 def cart(response):
-    return render(response, "main/ordering/cart.html")
+    return render(response, "main/Order_Management/cart.html")
 
 
 def checkout(response):
-    return render(response, "main/ordering/checkout.html")
+    return render(response, "main/Order_Management/checkout.html")
