@@ -19,6 +19,11 @@ pip install django-bootstrap-v5
 pip install django-crispy-forms
 ```
 
+- Pillow
+```
+pip install pillow
+```
+
 ## Pushing to GitHub
 Open the terminal and make sure to create your branch with:
 ```
