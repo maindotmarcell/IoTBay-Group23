@@ -85,3 +85,11 @@ def DeleteAccount(response):
         delete_form = DeleteUserForm(instance=response.user)
         context = {'delete_form': delete_form}
     return render(response, "Delete_Account/deleteaccount.html", context)
+
+
+def cart(response):
+    return render(response, "main/Order_Management/cart.html")
+
+
+def checkout(response):
+    return render(response, "main/Order_Management/checkout.html")

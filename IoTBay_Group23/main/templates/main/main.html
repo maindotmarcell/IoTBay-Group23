@@ -1,8 +1,8 @@
 {% extends 'main/base.html' %}
-
+{% load static %}
 {% block content %}
 <h2>This is the main page!</h2>
-<p>Main page content will be displayed here...</p>
+<p>Main page content will be displayed here. Including products sold</p>
 <table class="table">
     <tr>
         <th>Username</th>
@@ -15,5 +15,42 @@
         <td>{{user.date_joined}}</td>
     </tr>
 </table>
-<p>Logout <a href="/logout">here</a>.</p>
+<div class="row">
+    <div class="col-lg-4">
+        <img style="width: 100%;height: 200px" src="{% static 'images/product_placeholder.png' %}"/>
+        <div class="box-element product">
+            <h6><strong>Product</strong></h6>
+            <hr>
+            <button class="btn btn-outline-secondary add-btn">Add to Cart</button>
+            <a class="btn btn-outline-success" href="#">View</a>
+            <h4 style="float: right">$20</h4>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <img style="width: 100%;height: 200px" src="{% static 'images/product_placeholder.png' %}"/>
+        <div class="box-element product">
+            <h6><strong>Product</strong></h6>
+            <hr>
+            <button class="btn btn-outline-secondary add-btn">Add to Cart</button>
+            <a class="btn btn-outline-success" href="#">View</a>
+            <h4 style="float: right">$20</h4>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <img style="width: 100%;height: 200px" src="{% static 'images/product_placeholder.png' %}"/>
+        <div class="box-element product">
+            <h6><strong>Product</strong></h6>
+            <hr>
+            <button class="btn btn-outline-secondary add-btn">Add to Cart</button>
+            <a class="btn btn-outline-success" href="#">View</a>
+            <h4 style="float: right">$20</h4>
+        </div>
+    </div>
+</div>
+<br></br>
+<a class = 'btn btn-success' style = "margin-top: 30px;" href="/cart">Go to cart</a>
+<a class = 'btn btn-success' style = "margin-top: 30px;" href="/orderhistory">View Order History</a>
+<a class = 'btn btn-danger' style = "margin-top: 30px;" href = "/logout">Logout</a>
+<a class = 'btn btn-danger' style = "margin-top: 30px;" href="/edit">Edit Account Details</a>
+<a class = 'btn btn-danger' style = "margin-top: 30px;" href = "/deleteaccount">Delete Account</a>
 {% endblock %}
