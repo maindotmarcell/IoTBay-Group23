@@ -4,7 +4,5 @@ from .models import Item,Order,Payment, Invoice, Shipping
 admin.site.register(Item)
 admin.site.register(Order)
 admin.site.register(Payment)
-
 admin.site.register(Invoice)
-
 admin.site.register(Shipping)
