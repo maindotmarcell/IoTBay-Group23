@@ -36,6 +36,9 @@ urlpatterns = [
     path('checkout/', v.checkout, name="checkout"),
     path('registration/', include('django.contrib.auth.urls')),
 
+    # update item json view
+    path('update_item/', v.updateItem, name="update_item"),
+
     #staff registration
     path('staff_registration/', v.staff_registration, name="staff_Registration"),
 

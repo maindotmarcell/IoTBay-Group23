@@ -8,98 +8,102 @@ from django.contrib.auth.models import User
 from .forms import RegisterForm, UpdateForm, DeleteUserForm, StaffForm
 from .models import *
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+import json
 
 
 # Create your views here.
-def index(response):
-    return render(response, "main/base.html", {})
+def index(request):
+    return render(request, "main/base.html", {})
 
 
-def home(response):
-    return render(response, "main/home.html", {})
+def home(request):
+    return render(request, "main/home.html", {})
 
 
-def register(response):
-    if response.method == "POST":
-        form = RegisterForm(response.POST)
+def register(request):
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect("/login")
     else:
         form = RegisterForm()
 
-    return render(response, "main/register.html", {"form": form})
+    return render(request, "main/register.html", {"form": form})
 
 
-def welcome(response):
-    name = response.user.username
-    # email = response.user.email
+def welcome(request):
+    name = request.user.username
+    # email = request.user.email
     email = ""
-    # joined = response.user.date_joined
+    # joined = request.user.date_joined
     joined = ""
     return render(
-        response, "main/welcome.html", {"name": name, "email": email, "joined": joined}
+        request, "main/welcome.html", {"name": name, "email": email, "joined": joined}
     )
 
 
-def main(response):
+def main(request):
     products = Item.objects.all()
     context = {'products': products}
-    return render(response, "main/main.html", context) 
+    return render(request, "main/main.html", context) 
 
 
-def logout(response):
-    logout(response)
+def logout(request):
+    logout(request)
     return redirect("/home")
 
 
 
-def edit(response):
+def edit(request):
 
-    if response.method == "POST":   
-        user_form = UpdateForm(response.POST, instance=response.user)
+    if request.method == "POST":   
+        user_form = UpdateForm(request.POST, instance=request.user)
         if user_form.is_valid():
             user_form.save()
-            messages.success(response, f'Details Updated')
+            messages.success(request, f'Details Updated')
             return redirect ("/welcome")
 
     else:
-        user_form = UpdateForm(instance=response.user)
+        user_form = UpdateForm(instance=request.user)
 
 
     context = {
         'user_form': user_form
     }
 
-    return render(response, "main/edit.html", context)
+    return render(request, "main/edit.html", context)
 
-def confirmation (response):
-    return render(response, "Delete_Account/confirmation.html", {})
+def confirmation (request):
+    return render(request, "Delete_Account/confirmation.html", {})
 
-def DeleteAccount(response):
-    if response.method == 'POST':
-        delete_form = DeleteUserForm(response.POST, instance = response.user)
-        response.user.delete()
+def DeleteAccount(request):
+    if request.method == 'POST':
+        delete_form = DeleteUserForm(request.POST, instance = request.user)
+        request.user.delete()
         #return redirect ("/login")
         return redirect ("/confirmation")
 
     else:
-        delete_form = DeleteUserForm(instance=response.user)
+        delete_form = DeleteUserForm(instance=request.user)
         context = {'delete_form': delete_form}
-    return render(response, "Delete_Account/deleteaccount.html", context)
+    return render(request, "Delete_Account/deleteaccount.html", context)
 
 
-def cart(response):
-    return render(response, "Order_Management/cart.html")
+def cart(request):
+    order_items = OrderItem.objects.all()
+    context = {'items': order_items}
+    return render(request, "Order_Management/cart.html",context)
 
 
-def checkout(response):
-    return render(response, "Order_Management/checkout.html")
+def checkout(request):
+    return render(request, "Order_Management/checkout.html")
 
-def staff_registration(response):
-    if response.user.is_superuser:
-        if response.method == "POST":
-            form = StaffForm(response.POST)
+def staff_registration(request):
+    if request.user.is_superuser:
+        if request.method == "POST":
+            form = StaffForm(request.POST)
             if form.is_valid():
 
                 form.save()
@@ -109,4 +113,31 @@ def staff_registration(response):
         else:
             form = StaffForm()
             context = {"form": form}
-        return render(response, "registration/staff_registration.html", context)
+        return render(request, "registration/staff_registration.html", context)
+
+
+def updateItem(request):
+    data = json.loads(request.body)
+    productID = data['productID']
+    action = data['action']
+
+    print(f'Product ID: {productID}')
+    print(f'Action: {action}')
+
+    customer = request.user
+    product = Item.objects.get(id=productID)
+    order, created = Order.objects.get_or_create(customer=customer,complete=False)
+    orderItem, created = OrderItem.objects.get_or_create(order = order, item = product)
+
+    if action == 'add':
+        orderItem.quantity = (orderItem.quantity + 1)
+    elif action == 'remove':
+        orderItem.quantity = (orderItem.quantity - 1)
+
+    orderItem.save()
+
+    if orderItem.quantity <= 0:
+        orderItem.delete()
+
+
+    return JsonResponse('Item was added', safe=False)
