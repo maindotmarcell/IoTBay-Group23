@@ -98,7 +98,9 @@ def cart(request):
 
 
 def checkout(request):
-    return render(request, "Order_Management/checkout.html")
+    order_items = OrderItem.objects.all()
+    context = {'items': order_items}
+    return render(request, "Order_Management/checkout.html",context)
 
 def staff_registration(request):
     if request.user.is_superuser:

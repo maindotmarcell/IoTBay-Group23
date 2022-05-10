@@ -40,8 +40,8 @@
 				<div style="flex: 1">
 					<p>{{order_item.quantity}}</p>
 					<div>
-						<a class="btn btn-success" style="margin-top: 30px" href="#">+</a>
-						<a class="btn btn-success" style="margin-top: 30px" href="#">-</a>
+						<a data-product="{{order_item.item.id}}" data-action="add" class="btn btn-success update-cart" style="margin-top: 30px" href="#">+</a>
+						<a data-product="{{order_item.item.id}}" data-action="remove" class="btn btn-success update-cart" style="margin-top: 30px" href="#">-</a>
 					</div>
 				</div>
 				<div style="flex: 1"><p>${{order_item.total_price|floatformat:2}}</p></div>
