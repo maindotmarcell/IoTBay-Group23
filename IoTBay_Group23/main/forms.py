@@ -32,6 +32,16 @@ class StaffForm(UserCreationForm):
 
         model = User
         fields = ["username", "email", "password1", "password2", "is_staff"]
+
+class PaymentForm(forms.Form):
+    name_on_card = forms.CharField()
+    card_number = forms.IntegerField()
+    expiry_date = forms.DateField()
+    cvv = forms.IntegerField()
+    save_info = forms.BooleanField(required=False)
+    default = forms.BooleanField(required=False)
+    use_default = forms.BooleanField(required=False)
+
     
 #is_staff 
 #"__all__"
