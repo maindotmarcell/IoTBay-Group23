@@ -8,8 +8,9 @@
 <form method="POST" class="form-group">
     {% crispy payment_form %}
     <br>
-    <button type="submit" class="btn btn-success">Update</button>
-    <button href="/welcome" class="btn btn-danger">Cancel</button>
+    <a type="submit" style = "margin-top: 30px;" class="btn btn-success">Update</a>
+    <a class = 'btn btn-danger' style = "margin-top: 30px;" href="/edit">Edit Account Details</a>
+    <a class="btn btn-danger" style = "margin-top: 30px;" href="/welcome">Cancel</a>
 </form>
 
 {% endblock %}
