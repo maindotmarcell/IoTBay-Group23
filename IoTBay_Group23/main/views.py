@@ -75,6 +75,15 @@ def edit(request):
 
     return render(request, "main/edit.html", context)
 
+def edit_payment(request):
+    return render(request, "Payment_Management/edit_payment.html", {})
+
+def delete_payment_confirmation(request):
+    return render(request, "Payment_Management/delete_payment_confirmation.html", {})
+
+def delete_payment(request):
+    return render(request, "Payment_Management/delete_payment.html", {})
+
 def confirmation (request):
     return render(request, "Delete_Account/confirmation.html", {})
 
