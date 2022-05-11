@@ -1,11 +1,12 @@
 from profile import Profile
+from re import L
 from django.shortcuts import redirect, render
 from django.contrib import messages
 # from django.http import HttpResponse
 # from .models import Customer
 # from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
-from .forms import RegisterForm, UpdateForm, DeleteUserForm, StaffForm
+from .forms import PaymentForm, RegisterForm, UpdateForm, DeleteUserForm, StaffForm
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -76,7 +77,16 @@ def edit(request):
     return render(request, "main/edit.html", context)
 
 def edit_payment(request):
-    return render(request, "Payment_Management/edit_payment.html", {})
+    if request.method == "POST":
+        payment_form = PaymentForm(request.POST, instance=request.user)
+        if payment_form.is_valid():
+            payment_form.save()
+            messages.success(request, f'Details Updated')
+            return redirect ("/welcome")
+    else:
+        payment_form = PaymentForm(instance=request.user)
+        context = {'payment_form': payment_form}
+    return render(request, "Payment_Management/edit_payment.html", context)
 
 def delete_payment_confirmation(request):
     return render(request, "Payment_Management/delete_payment_confirmation.html", {})
