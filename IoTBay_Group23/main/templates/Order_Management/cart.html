@@ -32,34 +32,22 @@
 				<div style="flex: 1"><strong>Quantity</strong></div>
 				<div style="flex: 1"><strong>Total</strong></div>
 			</div>
-
+			{% for order_item in items %}
 			<div class="row">
-				<div style="flex: 2"><img style="width: 100%; height: 200px" src="{% static 'images/product_placeholder.png' %}" /></div>
-				<div style="flex: 2"><p>Product 1</p></div>
-				<div style="flex: 1"><p>$20</p></div>
+				<div style="flex: 2"><img style="width: 100%; height: 200px" src="{{order_item.item.image.url}}" /></div>
+				<div style="flex: 2"><p>{{order_item.item.name}}</p></div>
+				<div style="flex: 1"><p>${{order_item.item.price|floatformat:2}}</p></div>
 				<div style="flex: 1">
-					<p>2</p>
+					<p>{{order_item.quantity}}</p>
 					<div>
-						<a class="btn btn-success" style="margin-top: 30px" href="#">+</a>
-						<a class="btn btn-success" style="margin-top: 30px" href="#">-</a>
+						<a data-product="{{order_item.item.id}}" data-action="add" class="btn btn-success update-cart" style="margin-top: 30px" href="#">+</a>
+						<a data-product="{{order_item.item.id}}" data-action="remove" class="btn btn-success update-cart" style="margin-top: 30px" href="#">-</a>
 					</div>
 				</div>
-				<div style="flex: 1"><p>$32</p></div>
+				<div style="flex: 1"><p>${{order_item.total_price|floatformat:2}}</p></div>
 			</div>
+			{% endfor %}
 
-			<div class="row">
-				<div style="flex: 2"><img style="width: 100%; height: 200px" src="{% static 'images/product_placeholder.png' %} " /></div>
-				<div style="flex: 2"><p>Product 1</p></div>
-				<div style="flex: 1"><p>$20</p></div>
-				<div style="flex: 1">
-					<p class="quantity">2</p>
-					<div class="quantity">
-						<a class="btn btn-success" style="margin-top: 30px" href="#">+</a>
-						<a class="btn btn-success" style="margin-top: 30px" href="#">-</a>
-					</div>
-				</div>
-				<div style="flex: 1"><p>$32</p></div>
-			</div>
 		</div>
 	</div>
 </div>

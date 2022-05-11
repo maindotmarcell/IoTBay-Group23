@@ -31,12 +31,12 @@ class Item(models.Model):
 
 class Order(models.Model):
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
     description = models.CharField(max_length=150)
-    date = models.DateTimeField()
+    date = models.DateTimeField(null=True)
+    complete = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.date
+        return self.id
 
 
 class Payment(models.Model):
@@ -67,3 +67,13 @@ class Shipping(models.Model):
 
     def __str__(self):
         return self.tracking_number
+
+class OrderItem(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True)
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
+    quantity = models.IntegerField(default=0, null=True, blank=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def total_price(self):
+        return self.item.price * self.quantity
