@@ -107,15 +107,11 @@ def staff_registration(request):
         if request.method == "POST":
             form = StaffForm(request.POST)
             if form.is_valid():
-
                 form.save()
-
-
                 return redirect("/welcome")
         else:
             form = StaffForm()
-            context = {"form": form}
-        return render(request, "registration/staff_registration.html", context)
+        return render(request, "registration/staff_registration.html", {"form": form})
 
 
 def updateItem(request):
