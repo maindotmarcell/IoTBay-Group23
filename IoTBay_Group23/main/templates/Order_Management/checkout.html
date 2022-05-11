@@ -29,9 +29,8 @@
                 <hr>
             </form>
             <p>Payment Information:</p>
-            <form method="POST" >
-                {% csrf_token %}
-                {{payment_form|crispy}}
+            <form method="POST" class="form-group">
+                <!-- {% crispy payment_form %} -->
             </form>
             <br>
             <input id="form-button" class="btn btn-success btn-block" type="submit" value="Place Order">

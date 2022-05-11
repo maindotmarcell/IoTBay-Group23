@@ -6,8 +6,7 @@
 {% block content %}
 <h1>Edit Payment Information</h1>
 <form method="POST" class="form-group">
-    {% csrf_token %}
-    {{user_form|crispy}}
+    {% crispy payment_form %}
     <br>
     <button type="submit" class="btn btn-success">Update</button>
     <button href="/welcome" class="btn btn-danger">Cancel</button>

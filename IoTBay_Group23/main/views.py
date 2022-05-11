@@ -86,9 +86,8 @@ def edit_payment(request):
 
     else:
         payment_form = PaymentForm()
-        context = {'payment_form': payment_form}
 
-    return render(request, "Payment_Management/edit_payment.html", {})
+    return render(request, "Payment_Management/edit_payment.html", {'payment_form': payment_form})
 
 def delete_payment_confirmation(request):
     return render(request, "Payment_Management/delete_payment_confirmation.html", {})

@@ -35,9 +35,9 @@ class StaffForm(UserCreationForm):
         fields = ["username", "email", "password1", "password2", "is_staff"]
 
 class PaymentForm(forms.Form):
-    name_on_card = forms.CharField(help_text="Enter Card Holder Name...")
+    name_on_card = forms.CharField()
     card_number = forms.IntegerField()
-    expiry_date = forms.DateField(help_text="DD/MM/YY")
+    expiry_date = forms.DateField()
     cvv = forms.IntegerField()
   
     
