@@ -53,6 +53,10 @@ class Order(models.Model):
 
 class Payment(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    name_on_card = models.CharField(max_length=100)
+    card_number = models.IntegerField(default=0000-0000-0000)
+    expiry_date = models.DateTimeField(null=True)
+    cvv = models.IntegerField(default=000)
     amount = models.DecimalField(max_digits=7, decimal_places=3)
 
     def __str__(self):
