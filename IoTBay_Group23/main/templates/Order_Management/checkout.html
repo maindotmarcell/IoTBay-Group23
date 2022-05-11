@@ -1,5 +1,6 @@
 {% extends 'main/base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% block content %}
 <div class="row">
     <div class="col-lg-6">
@@ -27,24 +28,10 @@
 
                 <hr>
             </form>
-            <form id="form">
-                <br>
-                <div id="payment-info">
-                    <p>Payment Information:</p>
-                    <hr>
-                    <div class="form-field">
-                        <input class="form-control" type="text" name="name_on_card" placeholder="Name on Card...">
-                    </div>
-                    <div class="form-field">
-                        <input class="form-control" type="text" name="card_number" placeholder="Card Number...">
-                    </div>
-                    <div class="form-field">
-                        <input class="form-control" type="text" name="expiry_date" placeholder="Expiry Date...">
-                    </div>
-                    <div class="form-field">
-                        <input class="form-control" type="text" name="cvv" placeholder="CVV...">
-                    </div>
-                </div>
+            <p>Payment Information:</p>
+            <form method="POST" >
+                {% csrf_token %}
+                {{payment_form|crispy}}
             </form>
             <br>
             <input id="form-button" class="btn btn-success btn-block" type="submit" value="Place Order">

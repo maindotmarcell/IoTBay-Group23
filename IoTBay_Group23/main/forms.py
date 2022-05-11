@@ -38,10 +38,7 @@ class PaymentForm(forms.Form):
     card_number = forms.IntegerField()
     expiry_date = forms.DateField()
     cvv = forms.IntegerField()
-    save_info = forms.BooleanField(required=False)
-    default = forms.BooleanField(required=False)
-    use_default = forms.BooleanField(required=False)
-
+  
     
 #is_staff 
 #"__all__"

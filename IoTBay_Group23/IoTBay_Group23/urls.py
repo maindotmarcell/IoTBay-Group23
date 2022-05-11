@@ -35,8 +35,7 @@ urlpatterns = [
     path('cart/', v.cart, name="cart"),   
     path('checkout/', v.checkout, name="checkout"),
     path('registration/', include('django.contrib.auth.urls')),
-    path('edit_payment/', v.edit_payment, name="edit_payment"),
-    path('delete_payment/', v.delete_payment, name="delete_payment"),
+
 
     # update item json view
     path('update_item/', v.updateItem, name="update_item"),
@@ -50,6 +49,10 @@ urlpatterns = [
     path('<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='registration/resetpasswordform.html'), name = "password_reset_confirm"),
     path('resetpasswordcomplete', auth_views.PasswordResetCompleteView.as_view(template_name='registration/resetpassworddone.html'), name = "password_reset_complete"),
 
+    #payment management path
+    path('edit_payment/', v.edit_payment, name="edit_payment"),
+    path('delete_payment/', v.delete_payment, name="delete_payment"),
+    path('delete_payment_confirmation/', v.delete_payment_confirmation, name='delete_payment_confirmation'),
 
     #path('resetpassword', v.reset_password_form, name="reset_password_form")
 

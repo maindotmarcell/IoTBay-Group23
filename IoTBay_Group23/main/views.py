@@ -77,16 +77,18 @@ def edit(request):
     return render(request, "main/edit.html", context)
 
 def edit_payment(request):
-    if request.method == "POST":
+    if request.method == "POST":   
         payment_form = PaymentForm(request.POST, instance=request.user)
         if payment_form.is_valid():
             payment_form.save()
             messages.success(request, f'Details Updated')
             return redirect ("/welcome")
+
     else:
-        payment_form = PaymentForm(instance=request.user)
+        payment_form = UpdateForm(instance=request.user)
         context = {'payment_form': payment_form}
-    return render(request, "Payment_Management/edit_payment.html", context)
+
+    return render(request, "Payment_Management/edit_payment.html", {})
 
 def delete_payment_confirmation(request):
     return render(request, "Payment_Management/delete_payment_confirmation.html", {})
@@ -118,6 +120,11 @@ def cart(request):
 
 def checkout(request):
     order_items = OrderItem.objects.all()
+    if request.method == "POST":
+        payment_form = PaymentForm(request.POST)
+        if payment_form.is_valid():
+            payment_form.save()
+
     context = {'items': order_items}
     return render(request, "Order_Management/checkout.html",context)
 

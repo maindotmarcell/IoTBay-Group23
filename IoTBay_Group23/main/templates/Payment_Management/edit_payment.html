@@ -5,5 +5,12 @@
 
 {% block content %}
 <h1>Edit Payment Information</h1>
+<form method="POST" class="form-group">
+    {% csrf_token %}
+    {{user_form|crispy}}
+    <br>
+    <button type="submit" class="btn btn-success">Update</button>
+    <button href="/welcome" class="btn btn-danger">Cancel</button>
+</form>
 
-{% end block %}
+{% endblock %}
