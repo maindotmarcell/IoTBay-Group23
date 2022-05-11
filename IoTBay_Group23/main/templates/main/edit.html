@@ -17,13 +17,4 @@
         <button href="/welcome" class="btn btn-danger">Cancel</button>
     </form>
 
-    <form method="POST" class="form-group">
-        {% csrf_token %}
-        {{shippment_info|crispy}}
-    </form>
-
-    <form method="POST" class="form-group">
-        {% csrf_token %}
-        {{payment_info|crispy}}
-    </form>
 {%endblock%}
