@@ -105,8 +105,12 @@ def cart(request):
 
 
 def checkout(request):
-    order_items = OrderItem.objects.all()
-    context = {'items': order_items}
+    customer = request.user
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    items = order.orderitem_set.all()
+    cartItems = order.get_cart_items
+    context = {'items': items, 'order': order, 'cart_items': cartItems}
+
     return render(request, "Order_Management/checkout.html",context)
 
 def staff_registration(request):
