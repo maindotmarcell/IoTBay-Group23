@@ -1,7 +1,8 @@
 {% extends 'main/base.html' %}
-
+{% load static %}
 {% block content %}
 <h1>Welcome!</h1>
+<img src="{% static 'decorations/welcome.jpeg' %}">
 <br>
 <h3>You are logged in as: {{name}}</h3><br>
 <!-- <p>Email: {{email}}</p><br> -->
