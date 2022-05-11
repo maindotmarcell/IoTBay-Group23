@@ -4,6 +4,7 @@ from django import  forms
 from django.contrib.auth.models import User
 
 
+
 class RegisterForm(UserCreationForm):
     email = forms.EmailField()
 
@@ -34,9 +35,9 @@ class StaffForm(UserCreationForm):
         fields = ["username", "email", "password1", "password2", "is_staff"]
 
 class PaymentForm(forms.Form):
-    name_on_card = forms.CharField()
+    name_on_card = forms.CharField(help_text="Enter Card Holder Name...")
     card_number = forms.IntegerField()
-    expiry_date = forms.DateField()
+    expiry_date = forms.DateField(help_text="DD/MM/YY")
     cvv = forms.IntegerField()
   
     

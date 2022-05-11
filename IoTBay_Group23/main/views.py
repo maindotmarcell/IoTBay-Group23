@@ -78,14 +78,14 @@ def edit(request):
 
 def edit_payment(request):
     if request.method == "POST":   
-        payment_form = PaymentForm(request.POST, instance=request.user)
+        payment_form = PaymentForm(request.POST)
         if payment_form.is_valid():
             payment_form.save()
             messages.success(request, f'Details Updated')
             return redirect ("/welcome")
 
     else:
-        payment_form = UpdateForm(instance=request.user)
+        payment_form = PaymentForm()
         context = {'payment_form': payment_form}
 
     return render(request, "Payment_Management/edit_payment.html", {})
