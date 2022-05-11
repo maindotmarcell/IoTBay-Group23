@@ -1,0 +1,31 @@
+{% extends "main/base.html" %}
+
+{% block title %}Inventory Lists{% endblock %}
+
+{% block content %}
+<div class="content-section">
+    <table class="table table-striped table-bordered table-hovet">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Stock Availability</th>
+                <th scope="col">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr style="cursor: pointer; cursor : hand;" onclick="window.location='{% url 'view_item' item.id %}'">
+                <th scope="row">{{ forloop.counter }}</th>
+                <th scope="row">{{ item.name }}</th>
+                <th scope="row">{{ item.stock_num }}</th>
+                <th scope="row">{{ item.price }}</th>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<br></br>
+<a class = 'btn btn-success' style = "margin-top: 30px;" href="/add_item">Add Item</a>
+
+{%endblock%}
