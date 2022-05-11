@@ -45,8 +45,12 @@ def welcome(request):
 
 
 def main(request):
+    customer = request.user
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    items = order.orderitem_set.all()
+    cartItems = order.get_cart_items
     products = Item.objects.all()
-    context = {'products': products}
+    context = {'products': products, 'cart_items': cartItems}
     return render(request, "main/main.html", context) 
 
 
@@ -92,8 +96,11 @@ def DeleteAccount(request):
 
 
 def cart(request):
-    order_items = OrderItem.objects.all()
-    context = {'items': order_items}
+    customer = request.user
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    items = order.orderitem_set.all()
+    cartItems = order.get_cart_items
+    context = {'items': items, 'order': order, 'cart_items': cartItems}
     return render(request, "Order_Management/cart.html",context)
 
 
