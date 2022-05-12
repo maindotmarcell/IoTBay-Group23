@@ -83,14 +83,14 @@ def edit(request):
 
 def edit_payment(request):
     if request.method == "POST":   
-        edit_payment_form = EditPaymentForm(request.POST)
+        edit_payment_form = EditPaymentForm(request.POST) #instance=request.user when db connection is done
         if edit_payment_form.is_valid():
             edit_payment_form.save()
             messages.success(request, f'Details Updated')
             return redirect ("/welcome")
 
     else:
-        edit_payment_form = EditPaymentForm()
+        edit_payment_form = EditPaymentForm() #instance=request.user when db connection is done
 
     return render(request, "Payment_Management/edit_payment.html", {'edit_payment_form': edit_payment_form})
 
@@ -99,6 +99,24 @@ def delete_payment_confirmation(request):
 
 def delete_payment(request):
     return render(request, "Payment_Management/delete_payment.html", {})
+
+def edit_shippment(request):
+    if request.method == "POST":   
+        edit_address_form = EditAddressForm(request.POST) #instance=request.user when db connection is done
+        if edit_address_form.is_valid():
+            edit_address_form.save()
+            messages.success(request, f'Details Updated')
+            return redirect ("/welcome")
+
+    else:
+        edit_address_form = EditAddressForm() #instance=request.user when db connection is done
+    return render(request, "Shippment_Management/edit_shippment.html", {'edit_address_form': edit_address_form})
+
+def delete_shipping_confirmation(request):
+    return render(request, "Shippment_Management/delete_shipping_confirmation.html", {})
+
+def delete_shipping(request):
+    return render(request, "Shippment_Management/delete_shipping.html", {})
 
 def confirmation (request):
     return render(request, "Delete_Account/confirmation.html", {})

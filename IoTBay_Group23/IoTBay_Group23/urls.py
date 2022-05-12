@@ -59,6 +59,11 @@ urlpatterns = [
     path('delete_payment/', v.delete_payment, name="delete_payment"),
     path('delete_payment_confirmation/', v.delete_payment_confirmation, name='delete_payment_confirmation'),
 
+    #Shipping Management Path
+    path('edit_shippment/', v.edit_shippment, name="edit_shippment"),
+    path('delete_shipping/', v.delete_shipping, name="delete_shipping"),
+    path('delete_shipping_confirmation/', v.delete_shipping_confirmation, name='delete_shipping_confirmation'),
+
     #path('resetpassword', v.reset_password_form, name="reset_password_form")
 
 ]

@@ -48,7 +48,13 @@ class EditPaymentForm(forms.Form):
     expiry_date = forms.DateField()
     cvv = forms.IntegerField()
 
-
+class EditAddressForm(forms.Form):
+    street_address = forms.CharField()
+    city = forms.CharField()
+    postcode = forms.CharField()
+    country = forms.CharField()
+    state = forms.CharField()
+    shipping_method = forms.ChoiceField(widget=forms.RadioSelect(), choices=SHIPPING_CHOICES)
    
 # class CheckoutPayment(forms.Form):
 #     class Meta:
