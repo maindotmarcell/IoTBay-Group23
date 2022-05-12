@@ -2,6 +2,7 @@ from django.contrib.auth import login,authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django import  forms
 from django.contrib.auth.models import User
+from .models import Payment
 
 
 
@@ -34,11 +35,16 @@ class StaffForm(UserCreationForm):
         model = User
         fields = ["username", "email", "password1", "password2", "is_staff"]
 
-class PaymentForm(forms.Form):
+class EditPaymentForm(forms.Form):
     name_on_card = forms.CharField()
     card_number = forms.IntegerField()
     expiry_date = forms.DateField()
     cvv = forms.IntegerField()
+   
+# class CheckoutPayment(forms.Form):
+#     class Meta:
+#         model = Payment
+#         fields = ["name_on_card", "card_number"]
   
     
 #is_staff 

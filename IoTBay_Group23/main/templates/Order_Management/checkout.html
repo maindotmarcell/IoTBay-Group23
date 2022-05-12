@@ -29,8 +29,29 @@
                 <hr>
             </form>
             <p>Payment Information:</p>
-            <form method="POST" class="form-group">
-                <!-- {% crispy payment_form %} -->
+            <form id="form">
+                <!-- <br>
+                <div id="payment">
+                {% csrf_token %}
+                {{checkout_payment}}
+                </div> -->
+                <br>
+                <div id="payment-info">
+                    <p>Payment Information:</p>
+                    <hr>
+                    <div class="form-field">
+                        <input class="form-control" type="text" name="name_on_card" placeholder="Cardholder Name...">
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" type="text" name="card_number" placeholder="Card Number...">
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" type="text" name="expiry_date" placeholder="Expiry Date...">
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" type="text" name="cvv" placeholder="CVV...">
+                    </div>
+                </div>
             </form>
             <br>
             <input id="form-button" class="btn btn-success btn-block" type="submit" value="Place Order">

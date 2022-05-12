@@ -6,11 +6,13 @@
 {% block content %}
 <h1>Edit Payment Information</h1>
 <form method="POST" class="form-group">
-    {% crispy payment_form %}
-    <br>
-    <a type="submit" style = "margin-top: 30px;" class="btn btn-success">Update</a>
-    <a class = 'btn btn-danger' style = "margin-top: 30px;" href="/edit">Edit Account Details</a>
-    <a class="btn btn-danger" style = "margin-top: 30px;" href="/welcome">Cancel</a>
+    <fieldset>
+        {% crispy edit_payment_form %}
+        <br>
+        <a type="submit" style = "margin-top: 30px;" class="btn btn-success">Update</a>
+        <a class = 'btn btn-danger' style = "margin-top: 30px;" href="/edit">Edit Account Details</a>
+        <a class="btn btn-danger" style = "margin-top: 30px;" href="/welcome">Cancel</a>
+    </fieldset>
 </form>
 
 {% endblock %}

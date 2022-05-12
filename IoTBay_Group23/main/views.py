@@ -1,12 +1,13 @@
 from profile import Profile
 from re import L
+from tabnanny import check
 from django.shortcuts import redirect, render
 from django.contrib import messages
 # from django.http import HttpResponse
 # from .models import Customer
 # from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
-from .forms import PaymentForm, RegisterForm, UpdateForm, DeleteUserForm, StaffForm
+from .forms import *
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -78,16 +79,16 @@ def edit(request):
 
 def edit_payment(request):
     if request.method == "POST":   
-        payment_form = PaymentForm(request.POST)
-        if payment_form.is_valid():
-            payment_form.save()
+        edit_payment_form = EditPaymentForm(request.POST)
+        if edit_payment_form.is_valid():
+            edit_payment_form.save()
             messages.success(request, f'Details Updated')
             return redirect ("/welcome")
 
     else:
-        payment_form = PaymentForm()
+        edit_payment_form = EditPaymentForm()
 
-    return render(request, "Payment_Management/edit_payment.html", {'payment_form': payment_form})
+    return render(request, "Payment_Management/edit_payment.html", {'edit_payment_form': edit_payment_form})
 
 def delete_payment_confirmation(request):
     return render(request, "Payment_Management/delete_payment_confirmation.html", {})
@@ -119,11 +120,6 @@ def cart(request):
 
 def checkout(request):
     order_items = OrderItem.objects.all()
-    if request.method == "POST":
-        payment_form = PaymentForm(request.POST)
-        if payment_form.is_valid():
-            payment_form.save()
-
     context = {'items': order_items}
     return render(request, "Order_Management/checkout.html",context)
 
