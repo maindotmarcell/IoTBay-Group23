@@ -1,4 +1,5 @@
 from profile import Profile
+from django.template import RequestContext
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 # from django.http import HttpResponse
@@ -8,6 +9,7 @@ from django.contrib.auth.models import User
 from .forms import *
 from .models import *
 from django.contrib.auth.decorators import login_required
+from django.views.generic import View
 from django.http import JsonResponse
 import json
 
@@ -81,14 +83,14 @@ def edit(request):
 
 def edit_payment(request):
     if request.method == "POST":   
-        edit_payment_form = EditPaymentForm(request.POST)
+        edit_payment_form = EditPaymentForm(request.POST) #instance=request.user when db connection is done
         if edit_payment_form.is_valid():
             edit_payment_form.save()
             messages.success(request, f'Details Updated')
             return redirect ("/welcome")
 
     else:
-        edit_payment_form = EditPaymentForm()
+        edit_payment_form = EditPaymentForm() #instance=request.user when db connection is done
 
     return render(request, "Payment_Management/edit_payment.html", {'edit_payment_form': edit_payment_form})
 
@@ -106,6 +108,24 @@ def delete_payment(request):
         edit_payment_form = EditPaymentForm(instance=request.user)
         context = {'payment_form': edit_payment_form}
     return render(request, "Payment_Management/delete_payment.html", {})
+
+def edit_shippment(request):
+    if request.method == "POST":   
+        edit_address_form = EditAddressForm(request.POST) #instance=request.user when db connection is done
+        if edit_address_form.is_valid():
+            edit_address_form.save()
+            messages.success(request, f'Details Updated')
+            return redirect ("/welcome")
+
+    else:
+        edit_address_form = EditAddressForm() #instance=request.user when db connection is done
+    return render(request, "Shippment_Management/edit_shippment.html", {'edit_address_form': edit_address_form})
+
+def delete_shipping_confirmation(request):
+    return render(request, "Shippment_Management/delete_shipping_confirmation.html", {})
+
+def delete_shipping(request):
+    return render(request, "Shippment_Management/delete_shipping.html", {})
 
 def confirmation (request):
     return render(request, "Delete_Account/confirmation.html", {})
@@ -132,14 +152,41 @@ def cart(request):
     return render(request, "Order_Management/cart.html",context)
 
 
-def checkout(request):
-    customer = request.user
-    order, created = Order.objects.get_or_create(customer=customer, complete=False)
-    items = order.orderitem_set.all()
-    cartItems = order.get_cart_items
-    context = {'items': items, 'order': order, 'cart_items': cartItems}
+class CheckoutView(View):
+ 
+    def get(self, *args, **kwargs):
+        form = AddressForm()
+        order_items = OrderItem.objects.all()
+        context = {
+            'form': form,
+            'items': order_items
+        }
+        return render(self.request,"Order_Management/checkout.html", context)
+   
+    def post(self, *args, **kwargs):
+        form = AddressForm(self.request.POST or None)
+        # order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        # order = Order.objects.get(user=self.request.user, ordered=False)
+        if form.is_valid():
+            street_address = form.cleaned_data.get('street_address')
+            city = form.cleaned_data.get('city')
+            postcode = form.cleaned_data.get('postcode')
+            country = form.cleaned_data.get('country')
+            state = form.cleaned_data.get('state')
+            shipping_method = form.cleaned_data.get('shipping_method')
+ 
+        address = Shipping(
+            user=self.request.user,
+            street_address=street_address,
+            city=city,
+            postcode=postcode,
+            country=country,
+            state=state,
+            shipping_method=shipping_method
+        )
+        address.save()
+        return render(self.request,"Order_Management/checkout.html")
 
-    return render(request, "Order_Management/checkout.html",context)
 
 def staff_registration(request):
     if request.user.is_superuser:

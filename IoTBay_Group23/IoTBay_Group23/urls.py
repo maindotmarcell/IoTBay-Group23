@@ -33,7 +33,7 @@ urlpatterns = [
     path('confirmation/', v.confirmation, name="confirmation"),
     path('deleteaccount/', v.DeleteAccount, name="deleteaccount"),
     path('cart/', v.cart, name="cart"),   
-    path('checkout/', v.checkout, name="checkout"),
+    path('checkout/', v.CheckoutView.as_view(), name="checkout"),
     path('products/', v.products, name="products"),
     path('add_item/', v.add_item, name="add_item"),
     path('view_item/<int:pk>', v.view_item, name="view_item"),
@@ -58,6 +58,11 @@ urlpatterns = [
     path('edit_payment/', v.edit_payment, name="edit_payment"),
     path('delete_payment/', v.delete_payment, name="delete_payment"),
     path('delete_payment_confirmation/', v.delete_payment_confirmation, name='delete_payment_confirmation'),
+
+    #Shipping Management Path
+    path('edit_shippment/', v.edit_shippment, name="edit_shippment"),
+    path('delete_shipping/', v.delete_shipping, name="delete_shipping"),
+    path('delete_shipping_confirmation/', v.delete_shipping_confirmation, name='delete_shipping_confirmation'),
 
     #path('resetpassword', v.reset_password_form, name="reset_password_form")
 

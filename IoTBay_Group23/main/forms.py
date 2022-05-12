@@ -4,6 +4,11 @@ from django import  forms
 from django.contrib.auth.models import User
 from .models import Payment
 
+SHIPPING_CHOICES = (
+    ('S', 'Standard'),
+    ('E', 'Express')
+)
+
 from django.forms import ModelForm
 from .models import Item
 
@@ -43,7 +48,13 @@ class EditPaymentForm(forms.Form):
     expiry_date = forms.DateField()
     cvv = forms.IntegerField()
 
-
+class EditAddressForm(forms.Form):
+    street_address = forms.CharField()
+    city = forms.CharField()
+    postcode = forms.CharField()
+    country = forms.CharField()
+    state = forms.CharField()
+    shipping_method = forms.ChoiceField(widget=forms.RadioSelect(), choices=SHIPPING_CHOICES)
    
 # class CheckoutPayment(forms.Form):
 #     class Meta:
@@ -63,3 +74,11 @@ class UpdateItemForm(ModelForm):
 
 #is_staff 
 #"__all__"
+
+class AddressForm(forms.Form):
+    street_address = forms.CharField()
+    city = forms.CharField()
+    postcode = forms.CharField()
+    country = forms.CharField()
+    state = forms.CharField()
+    shipping_method = forms.ChoiceField(widget=forms.RadioSelect(), choices=SHIPPING_CHOICES)
