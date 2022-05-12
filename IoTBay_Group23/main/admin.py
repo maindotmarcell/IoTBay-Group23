@@ -9,8 +9,8 @@ admin.site.register(Invoice)
 class ShippingAdmin(admin.ModelAdmin):
     list_display = [
         'user',
-        'order',
-        'tracking_number',
+        # 'order',
+        # 'tracking_number',
         'street_address',
         'city',
         'postcode',

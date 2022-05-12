@@ -1,7 +1,8 @@
 from profile import Profile
+from django.template import RequestContext
 from django.shortcuts import redirect, render
 from django.contrib import messages
-# from django.http import HttpResponse
+from django.http import HttpResponse
 # from .models import Customer
 # from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
@@ -54,7 +55,6 @@ def main(request):
 def logout(request):
     logout(request)
     return redirect("/home")
-
 
 
 def edit(request):
@@ -110,17 +110,27 @@ class CheckoutView(View):
    
     def post(self, *args, **kwargs):
         form = AddressForm(self.request.POST or None)
+        # order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        # order = Order.objects.get(user=self.request.user, ordered=False)
         if form.is_valid():
-            print(form.cleaned_data)
-            return redirect('checkout')
-        else:
-            print('Form Invalid')
-            return redirect('checkout')
+            street_address = form.cleaned_data.get('street_address')
+            city = form.cleaned_data.get('city')
+            postcode = form.cleaned_data.get('postcode')
+            country = form.cleaned_data.get('country')
+            state = form.cleaned_data.get('state')
+            shipping_method = form.cleaned_data.get('shipping_method')
 
-    # def checkout(request):
-        # order_items = OrderItem.objects.all()
-        # context = {'items': order_items}
-        # return render(request, "Order_Management/checkout.html",context)
+        address = Shipping(
+            user=self.request.user,
+            street_address=street_address,
+            city=city,
+            postcode=postcode,
+            country=country,
+            state=state,
+            shipping_method=shipping_method
+        )
+        address.save()
+        return render(self.request,"Order_Management/checkout.html")
 
 def staff_registration(request):
     if request.user.is_superuser:

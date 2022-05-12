@@ -36,6 +36,7 @@ class Item(models.Model):
 class Order(models.Model):
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.CharField(max_length=150)
+    shippings = models.ForeignKey("Shipping", on_delete=models.SET_NULL, null=True)
     date = models.DateTimeField(null=True)
     complete = models.BooleanField(default=False)
 
@@ -62,8 +63,8 @@ class Invoice(models.Model):
 
 class Shipping(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    tracking_number = models.BigIntegerField(unique=True)
+    # orders = models.ForeignKey(Order, on_delete=models.CASCADE)
+    # tracking_number = models.BigIntegerField(unique=True)
     street_address = models.CharField(max_length=200, null=True)
     city = models.CharField(max_length=200, null=True)
     postcode = models.CharField(max_length=200, null=True)
