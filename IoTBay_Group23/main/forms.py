@@ -4,6 +4,8 @@ from django import  forms
 from django.contrib.auth.models import User
 from .models import Payment
 
+from django.forms import ModelForm
+from .models import Item
 
 
 class RegisterForm(UserCreationForm):
@@ -49,5 +51,15 @@ class EditPaymentForm(forms.Form):
 #         fields = ["name_on_card", "card_number"]
   
     
+class AddItemForm(ModelForm):
+    class Meta:
+        model = Item
+        fields = ['name', 'stock_num', 'price', 'image']
+
+class UpdateItemForm(ModelForm):
+    class Meta:
+        model = Item
+        fields = ['name', 'stock_num', 'price', 'image']
+
 #is_staff 
 #"__all__"

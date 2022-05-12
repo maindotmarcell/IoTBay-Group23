@@ -7,7 +7,13 @@
 <!-- <p>Email: {{email}}</p><br> -->
 <p>Email: {{user.email}}</p>
 <p>Joined: {{user.date_joined}}</p>
-<p>Staff status: {{user.is_staff}}</p>
+{% if request.user.is_superuser %}
+<p>Account Status: Admininstrator</p>
+{% elif request.user.is_staff %}
+<p>Account Status: Staff</p>
+{%else %}
+<p>Account Status: Customer</p>
+{%endif %}
 <br>
 
 <a class = 'btn btn-success' style = "margin-top: 30px;" href="/main">Continue to Shop</a>
@@ -20,5 +26,11 @@
 {% if request.user.is_superuser %}
 <br>
 <a class = 'btn btn-dark' style = "margin-top: 30px;" href = "/staff_registration">Register User</a>
+{% endif %}
+
+
+{% if request.user.is_superuser or request.user.is_staff%}
+<br>
+<a class = 'btn btn-dark' style = "margin-top: 30px;" href = "/products">Manage Products</a>
 {% endif %}
 {% endblock %}

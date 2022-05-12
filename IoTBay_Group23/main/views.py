@@ -1,7 +1,5 @@
 from profile import Profile
-from re import L
-from tabnanny import check
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 # from django.http import HttpResponse
 # from .models import Customer
@@ -47,8 +45,12 @@ def welcome(request):
 
 
 def main(request):
+    customer = request.user
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    items = order.orderitem_set.all()
+    cartItems = order.get_cart_items
     products = Item.objects.all()
-    context = {'products': products}
+    context = {'products': products, 'cart_items': cartItems}
     return render(request, "main/main.html", context) 
 
 
@@ -113,14 +115,21 @@ def DeleteAccount(request):
 
 
 def cart(request):
-    order_items = OrderItem.objects.all()
-    context = {'items': order_items}
+    customer = request.user
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    items = order.orderitem_set.all()
+    cartItems = order.get_cart_items
+    context = {'items': items, 'order': order, 'cart_items': cartItems}
     return render(request, "Order_Management/cart.html",context)
 
 
 def checkout(request):
-    order_items = OrderItem.objects.all()
-    context = {'items': order_items}
+    customer = request.user
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    items = order.orderitem_set.all()
+    cartItems = order.get_cart_items
+    context = {'items': items, 'order': order, 'cart_items': cartItems}
+
     return render(request, "Order_Management/checkout.html",context)
 
 def staff_registration(request):
@@ -128,15 +137,11 @@ def staff_registration(request):
         if request.method == "POST":
             form = StaffForm(request.POST)
             if form.is_valid():
-
                 form.save()
-
-
                 return redirect("/welcome")
         else:
             form = StaffForm()
-            context = {"form": form}
-        return render(request, "registration/staff_registration.html", context)
+        return render(request, "registration/staff_registration.html", {"form": form})
 
 
 def updateItem(request):
@@ -164,3 +169,57 @@ def updateItem(request):
 
 
     return JsonResponse('Item was added', safe=False)
+
+def products(request):
+    if request.user.is_staff or request.user.is_superuser:
+        items = Item.objects.all()
+        context = {
+            "items" : items
+        }
+        return render(request, "Product_Management/products.html", context)
+
+def add_item(request):
+    if request.user.is_staff or request.user.is_superuser:
+        if request.method == "POST":
+            add_form = AddItemForm(request.POST, request.FILES)
+            if add_form.is_valid():
+                new_item = add_form.save(commit=False)
+                new_item.save()
+                return redirect("/products")
+
+        else:
+            add_form = AddItemForm()
+
+        return render(request, "Product_Management/add_item.html", {"form": add_form})
+
+
+def view_item(request, pk):
+    if request.user.is_staff or request.user.is_superuser:
+        item = get_object_or_404(Item, pk=pk)
+        context = {
+            'item' : item 
+        }
+        return render (request, "Product_management/view_item.html", context=context)
+
+def delete_item(request, pk):
+    if request.user.is_staff or request.user.is_superuser:
+        item = get_object_or_404(Item, pk=pk)
+        item.delete()
+        return redirect("/products")
+
+def update_item(request, pk):
+    if request.user.is_staff or request.user.is_superuser:
+        item = get_object_or_404(Item, pk=pk)
+        if request.method == "POST":
+            updateForm = UpdateItemForm(request.POST, request.FILES)
+            if updateForm.is_valid():
+                item.name = updateForm.data['name']
+                item.stock_num = updateForm.data['stock_num']
+                item.price = updateForm.data['price']
+                item.save()
+                return redirect(f"/view_item/{pk}")
+        
+        else:
+            updateForm = UpdateItemForm(instance = item)
+
+        return render(request, "Product_Management/update_item.html", {"form": updateForm})
