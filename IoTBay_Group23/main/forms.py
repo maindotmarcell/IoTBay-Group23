@@ -40,6 +40,8 @@ class EditPaymentForm(forms.Form):
     card_number = forms.IntegerField()
     expiry_date = forms.DateField()
     cvv = forms.IntegerField()
+
+
    
 # class CheckoutPayment(forms.Form):
 #     class Meta:
