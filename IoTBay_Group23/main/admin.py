@@ -5,4 +5,20 @@ admin.site.register(Item)
 admin.site.register(Order)
 admin.site.register(Payment)
 admin.site.register(Invoice)
-admin.site.register(Shipping)
+
+class ShippingAdmin(admin.ModelAdmin):
+    list_display = [
+        'user',
+        'order',
+        'tracking_number',
+        'street_address',
+        'city',
+        'postcode',
+        'state',
+        'country',
+        'date',
+        'shipping_method'
+    ]
+
+admin.site.register(Shipping, ShippingAdmin)
+

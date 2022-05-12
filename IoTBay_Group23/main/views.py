@@ -5,9 +5,10 @@ from django.contrib import messages
 # from .models import Customer
 # from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
-from .forms import RegisterForm, UpdateForm, DeleteUserForm, StaffForm
+from .forms import RegisterForm, UpdateForm, DeleteUserForm, StaffForm, AddressForm
 from .models import *
 from django.contrib.auth.decorators import login_required
+from django.views.generic import View
 from django.http import JsonResponse
 import json
 
@@ -96,11 +97,30 @@ def cart(request):
     context = {'items': order_items}
     return render(request, "Order_Management/cart.html",context)
 
+class CheckoutView(View):
 
-def checkout(request):
-    order_items = OrderItem.objects.all()
-    context = {'items': order_items}
-    return render(request, "Order_Management/checkout.html",context)
+    def get(self, *args, **kwargs):
+        form = AddressForm()
+        order_items = OrderItem.objects.all()
+        context = {
+            'form': form,
+            'items': order_items
+        }
+        return render(self.request,"Order_Management/checkout.html", context)
+   
+    def post(self, *args, **kwargs):
+        form = AddressForm(self.request.POST or None)
+        if form.is_valid():
+            print(form.cleaned_data)
+            return redirect('checkout')
+        else:
+            print('Form Invalid')
+            return redirect('checkout')
+
+    # def checkout(request):
+        # order_items = OrderItem.objects.all()
+        # context = {'items': order_items}
+        # return render(request, "Order_Management/checkout.html",context)
 
 def staff_registration(request):
     if request.user.is_superuser:

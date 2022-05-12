@@ -1,33 +1,34 @@
 {% extends 'main/base.html' %}
 {% load static %}
 {% block content %}
-<div class="row">
-    <div class="col-lg-6">
-        <div class="box-element" id="form-wrapper" style="border:1px solid black; padding: 10px; border-radius: 5px;">
-            <form id="form">
-                <div id="shipping-info">
-                    <p>Shipping Information:</p>
-                    <hr>
-                    <div class="form-field">
-                        <input class="form-control" type="text" name="address" placeholder="Address...">
-                    </div>
-                    <div class="form-field">
-                        <input class="form-control" type="text" name="city" placeholder="City...">
-                    </div>
-                    <div class="form-field">
-                        <input class="form-control" type="text" name="state" placeholder="State...">
-                    </div>
-                    <div class="form-field">
-                        <input class="form-control" type="text" name="zipcode" placeholder="Zip code...">
-                    </div>
-                    <div class="form-field">
-                        <input class="form-control" type="text" name="country" placeholder="Zip code...">
-                    </div>
-                </div>
 
-                <hr>
-            </form>
-            <form id="form">
+
+<main class="mt-5 pt-4">
+    <div class="row">
+        <div class="col-lg-6" style="border:1px solid black; padding: 10px; border-radius: 5px;">
+            <form class="card-body" method="POST">
+              {% csrf_token %}
+              <h>Shipping Information:</h>
+              <div class="md-form mb-5">
+                <input type="text" name="street_address" id="street_address" class="form-control" placeholder="Street Addrress..." required>
+                <input type="text" name="city" id="city" class="form-control" placeholder="City..." required>
+                <input type="text" name="state" id="state" class="form-control" placeholder="State..." required>
+                <input type="text" name="postcode" id="postcode" class="form-control" placeholder="Postcode..." required>
+                <input type="text" name="country" id="country" class="form-control" placeholder="Country..." required>
+              </div>
+              
+              <h>Shipping Options:</h>
+              <div class="d-block my-3">
+                <div class="custom-control custom-radio">
+                  <input id="standard" value="S" name="shipping_method" type="radio" class="custom-control-input">
+                  <label class="custom-control-label" for="standard">Standard</label>
+                </div>
+                <div class="custom-control custom-radio">
+                  <input id="express" value="E" name="shipping_method" type="radio" class="custom-control-input">
+                  <label class="custom-control-label" for="express">Express</label>
+                </div>
+              </div>
+              
                 <br>
                 <div id="payment-info">
                     <p>Payment Information:</p>
@@ -42,35 +43,34 @@
                         <input class="form-control" type="text" name="cvv" placeholder="CVV...">
                     </div>
                 </div>
+
+              <hr class="mb-4">
+              <button class="btn btn-primary btn-lg btn-block" type="submit">Place Order</button>
             </form>
-            <br>
-            <input id="form-button" class="btn btn-success btn-block" type="submit" value="Place Order">
         </div>
 
-        <br>
-        <div class="box-element hidden" id="payment-info">
-            <small>Paypal Options</small>
-        </div>
-        
-    </div>
-
-    <div class="col-lg-6" style="border:1px solid black; padding: 10px; border-radius: 5px;">
-        <div class="box-element" >
-            <a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
-            <hr>
-            <h3>Order Summary</h3>
-            <hr>
-            {% for order_item in items %}
-            <div class="cart-row">
-                <div style="flex:2"><img style="width: 100%; height: 200px" src="{{order_item.item.image.url}}"></div>
-                <div style="flex:2"><p>{{order_item.item.name}}</p></div>
-                <div style="flex:1"><p>${{order_item.item.price|floatformat:2}}</p></div>
-                <div style="flex:1"><p>x{{order_item.quantity}}</p></div>
+            <div class="col-lg-6" style="border:1px solid black; padding: 10px; border-radius: 5px;">
+                <div class="box-element" >
+                    <a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+                    <hr>
+                    <h3>Order Summary</h3>
+                    <hr>
+                    {% for order_item in items %}
+                    <div class="cart-row">
+                        <div style="flex:2"><img style="width: 100%; height: 200px" src="{{order_item.item.image.url}}"></div>
+                        <div style="flex:2"><p>{{order_item.item.name}}</p></div>
+                        <div style="flex:1"><p>${{order_item.item.price|floatformat:2}}</p></div>
+                        <div style="flex:1"><p>x{{order_item.quantity}}</p></div>
+                    </div>
+                    {% endfor %}
+                    <h5>Items:   2</h5>
+                    <h5>Total:   $40</h5>
+                </div>
             </div>
-            {% endfor %}
-            <h5>Items:   2</h5>
-            <h5>Total:   $40</h5>
+            
+          </div>
         </div>
-    </div>
 </div>
+</main> 
+
 {% endblock %}
