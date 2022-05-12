@@ -96,6 +96,15 @@ def delete_payment_confirmation(request):
     return render(request, "Payment_Management/delete_payment_confirmation.html", {})
 
 def delete_payment(request):
+    if request.method == 'POST':
+        edit_payment_form = EditPaymentForm(request.POST, instance = request.user)
+        request.user.delete()
+        #return redirect ("/login")
+        return redirect ("/confirmation")
+
+    else:
+        edit_payment_form = EditPaymentForm(instance=request.user)
+        context = {'payment_form': edit_payment_form}
     return render(request, "Payment_Management/delete_payment.html", {})
 
 def confirmation (request):

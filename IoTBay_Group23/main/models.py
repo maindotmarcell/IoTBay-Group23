@@ -53,7 +53,7 @@ class Order(models.Model):
 
 class Payment(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    customer = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name_on_card = models.CharField(max_length=100)
     card_number = models.IntegerField(default=0000-0000-0000)
     expiry_date = models.DateTimeField(null=True)
