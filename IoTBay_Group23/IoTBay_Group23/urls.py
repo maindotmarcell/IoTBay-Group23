@@ -34,6 +34,11 @@ urlpatterns = [
     path('deleteaccount/', v.DeleteAccount, name="deleteaccount"),
     path('cart/', v.cart, name="cart"),   
     path('checkout/', v.checkout, name="checkout"),
+    path('products/', v.products, name="products"),
+    path('add_item/', v.add_item, name="add_item"),
+    path('view_item/<int:pk>', v.view_item, name="view_item"),
+    path('delete_item/<int:pk>', v.delete_item, name="delete_item"),
+    path('update_item/<int:pk>', v.update_item, name="update_item"),
     path('registration/', include('django.contrib.auth.urls')),
 
     # update item json view

@@ -26,4 +26,10 @@
 <br>
 <a class = 'btn btn-dark' style = "margin-top: 30px;" href = "/staff_registration">Register User</a>
 {% endif %}
+
+
+{% if request.user.is_superuser or request.user.is_staff%}
+<br>
+<a class = 'btn btn-dark' style = "margin-top: 30px;" href = "/products">Manage Products</a>
+{% endif %}
 {% endblock %}

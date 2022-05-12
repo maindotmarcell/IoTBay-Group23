@@ -2,6 +2,8 @@ from django.contrib.auth import login,authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django import  forms
 from django.contrib.auth.models import User
+from django.forms import ModelForm
+from .models import Item
 
 
 class RegisterForm(UserCreationForm):
@@ -42,6 +44,15 @@ class PaymentForm(forms.Form):
     default = forms.BooleanField(required=False)
     use_default = forms.BooleanField(required=False)
 
-    
+class AddItemForm(ModelForm):
+    class Meta:
+        model = Item
+        fields = ['name', 'stock_num', 'price', 'image']
+
+class UpdateItemForm(ModelForm):
+    class Meta:
+        model = Item
+        fields = ['name', 'stock_num', 'price', 'image']
+
 #is_staff 
 #"__all__"
