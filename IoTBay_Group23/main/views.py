@@ -152,50 +152,55 @@ def updateItem(request):
     return JsonResponse('Item was added', safe=False)
 
 def products(request):
-    items = Item.objects.all()
-    context = {
-        "items" : items
-    }
-    return render(request, "Product_Management/products.html", context)
+    if request.user.is_staff or request.user.is_superuser:
+        items = Item.objects.all()
+        context = {
+            "items" : items
+        }
+        return render(request, "Product_Management/products.html", context)
 
 def add_item(request):
-    if request.method == "POST":
-        add_form = AddItemForm(request.POST, request.FILES)
-        if add_form.is_valid():
-            new_item = add_form.save(commit=False)
-            new_item.save()
-            return redirect("/products")
+    if request.user.is_staff or request.user.is_superuser:
+        if request.method == "POST":
+            add_form = AddItemForm(request.POST, request.FILES)
+            if add_form.is_valid():
+                new_item = add_form.save(commit=False)
+                new_item.save()
+                return redirect("/products")
 
-    else:
-        add_form = AddItemForm()
+        else:
+            add_form = AddItemForm()
 
-    return render(request, "Product_Management/add_item.html", {"form": add_form})
+        return render(request, "Product_Management/add_item.html", {"form": add_form})
 
 
 def view_item(request, pk):
-    item = get_object_or_404(Item, pk=pk)
-    context = {
-        'item' : item 
-    }
-    return render (request, "Product_management/view_item.html", context=context)
+    if request.user.is_staff or request.user.is_superuser:
+        item = get_object_or_404(Item, pk=pk)
+        context = {
+            'item' : item 
+        }
+        return render (request, "Product_management/view_item.html", context=context)
 
 def delete_item(request, pk):
-    item = get_object_or_404(Item, pk=pk)
-    item.delete()
-    return redirect("/products")
+    if request.user.is_staff or request.user.is_superuser:
+        item = get_object_or_404(Item, pk=pk)
+        item.delete()
+        return redirect("/products")
 
 def update_item(request, pk):
-    item = get_object_or_404(Item, pk=pk)
-    if request.method == "POST":
-        updateForm = UpdateItemForm(request.POST, request.FILES)
-        if updateForm.is_valid():
-            item.name = updateForm.data['name']
-            item.stock_num = updateForm.data['stock_num']
-            item.price = updateForm.data['price']
-            item.save()
-            return redirect(f"/view_item/{pk}")
-    
-    else:
-        updateForm = UpdateItemForm(instance = item)
+    if request.user.is_staff or request.user.is_superuser:
+        item = get_object_or_404(Item, pk=pk)
+        if request.method == "POST":
+            updateForm = UpdateItemForm(request.POST, request.FILES)
+            if updateForm.is_valid():
+                item.name = updateForm.data['name']
+                item.stock_num = updateForm.data['stock_num']
+                item.price = updateForm.data['price']
+                item.save()
+                return redirect(f"/view_item/{pk}")
+        
+        else:
+            updateForm = UpdateItemForm(instance = item)
 
-    return render(request, "Product_Management/update_item.html", {"form": updateForm})
+        return render(request, "Product_Management/update_item.html", {"form": updateForm})
