@@ -18,6 +18,10 @@ from datetime import datetime
 #     # is_superuser = models.BooleanField(default=False)
 #     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+SHIPPING_CHOICES = (
+    ('S', 'Standard'),
+    ('E', 'Express')
+)
 
 class Item(models.Model):
     name = models.CharField(max_length=100)
@@ -53,7 +57,7 @@ class Order(models.Model):
 
 class Payment(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    customer = models.ForeignKey(User, on_delete=models.CASCADE)
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     name_on_card = models.CharField(max_length=100)
     card_number = models.IntegerField(default=0000-0000-0000)
     expiry_date = models.DateTimeField(null=True)
@@ -74,13 +78,16 @@ class Invoice(models.Model):
 
 class Shipping(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    tracking_number = models.BigIntegerField(unique=True)
-    address = models.CharField(max_length=200, null=True)
+    # orders = models.ForeignKey(Order, on_delete=models.CASCADE)
+    # tracking_number = models.BigIntegerField(unique=True)
+    street_address = models.CharField(max_length=200, null=True)
     city = models.CharField(max_length=200, null=True)
-    postcode = models.IntegerField()
+    postcode = models.CharField(max_length=200, null=True)
+    country = models.CharField(max_length=200, null=True)
+    state = models.CharField(max_length=200, null=True)
     date = models.DateTimeField(auto_now_add=True)
-
+    shipping_method = models.CharField(choices=SHIPPING_CHOICES, max_length=2, null=True)
+ 
     def __str__(self):
         return self.tracking_number
 
