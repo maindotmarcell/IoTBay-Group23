@@ -40,7 +40,7 @@ class Order(models.Model):
     complete = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
     
     @property
     def get_cart_total(self):
@@ -64,7 +64,7 @@ class Payment(models.Model):
     cvv = models.IntegerField(default=000)
 
     def __str__(self):
-        return self.amount
+        return str(self.id)
 
 
 class Invoice(models.Model):
@@ -89,7 +89,7 @@ class Shipping(models.Model):
     shipping_method = models.CharField(choices=SHIPPING_CHOICES, max_length=2, null=True)
  
     def __str__(self):
-        return self.tracking_number
+        return (f'{self.user.username}\'s address')
 
 class OrderItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True)

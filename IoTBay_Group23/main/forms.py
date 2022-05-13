@@ -1,8 +1,9 @@
+from calendar import c
 from django.contrib.auth import login,authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django import  forms
 from django.contrib.auth.models import User
-from .models import Payment
+from .models import Payment, Shipping
 
 SHIPPING_CHOICES = (
     ('S', 'Standard'),
@@ -42,19 +43,16 @@ class StaffForm(UserCreationForm):
         model = User
         fields = ["username", "email", "password1", "password2", "is_staff"]
 
-class EditPaymentForm(forms.Form):
-    name_on_card = forms.CharField()
-    card_number = forms.IntegerField()
-    expiry_date = forms.DateField()
-    cvv = forms.IntegerField()
 
-class EditAddressForm(forms.Form):
-    street_address = forms.CharField()
-    city = forms.CharField()
-    postcode = forms.CharField()
-    country = forms.CharField()
-    state = forms.CharField()
-    shipping_method = forms.ChoiceField(widget=forms.RadioSelect(), choices=SHIPPING_CHOICES)
+class EditPaymentForm(ModelForm):
+    class Meta:
+        model = Payment
+        fields = ['name_on_card','card_number','expiry_date','cvv']
+
+class EditAddressForm(ModelForm):
+    class Meta:
+        model = Shipping
+        fields = ['street_address','city','postcode','country','state','shipping_method']
    
 # class CheckoutPayment(forms.Form):
 #     class Meta:
