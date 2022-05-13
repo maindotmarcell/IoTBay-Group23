@@ -139,7 +139,8 @@ def cart(request):
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
     items = order.orderitem_set.all()
     cartItems = order.get_cart_items
-    context = {'items': items, 'order': order, 'cart_items': cartItems}
+    cartTotal = order.get_cart_total
+    context = {'items': items, 'order': order, 'cart_items': cartItems, 'cart_total': cartTotal}
     return render(request, "Order_Management/cart.html",context)
 
 
@@ -148,9 +149,14 @@ class CheckoutView(View):
     def get(self, *args, **kwargs):
         form = AddressForm()
         order_items = OrderItem.objects.all()
+        order,created = Order.objects.get_or_create(customer=self.request.user, complete=False)
+        cart_items = order.get_cart_items
+        cart_total = order.get_cart_total
         context = {
             'form': form,
-            'items': order_items
+            'items': order_items,
+            'cart_items': cart_items,
+            'cart_total': cart_total
         }
         return render(self.request,"Order_Management/checkout.html", context)
    
