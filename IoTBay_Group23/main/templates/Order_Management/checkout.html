@@ -8,8 +8,8 @@
         <div class="col-lg-6" style="border:1px solid black; padding: 10px; border-radius: 5px;">
             <form class="card-body" method="POST">
               {% csrf_token %}
-              <h>Shipping Information:</h>
-              <div class="md-form mb-5">
+              <p><strong>Shipping Information:</strong></p>
+              <!-- <div class="md-form mb-5">
                 <input type="text" name="street_address" id="street_address" class="form-control" placeholder="Street Addrress..." required>
                 <input type="text" name="city" id="city" class="form-control" placeholder="City..." required>
                 <input type="text" name="state" id="state" class="form-control" placeholder="State..." required>
@@ -27,25 +27,50 @@
                   <input id="express" value="E" name="shipping_method" type="radio" class="custom-control-input">
                   <label class="custom-control-label" for="express">Express</label>
                 </div>
+              </div> -->
+              {% if has_address %}
+                <p>Your preferred shipping address is:</p>
+                <p>{{shipping.street_address}}</p>
+                <p>{{shipping.city}}</p>
+                <p>{{shipping.state}}</p>
+                <p>{{shipping.postcode}}</p>
+                <p>{{shipping.country}}</p>
+                <p>Shipping method: {{shipping.shipping_method}}</p>
+              {% else %}
+                <p>Please update your shipping preferences...</p>
+              {% endif %}
+              <a class="btn btn-outline-dark" style = "margin-top: 10px;" href="/edit_shippment">Edit Shipping Information</a>
+              <br>
+              <hr>
+              <div id="payment-info">
+                  <p><strong>Payment Information:</strong></p>
+                  <!-- <hr>
+                  <div class="form-field">
+                      <input class="form-control" type="text" name="card_number" placeholder="Card Number...">
+                  </div>
+                  <div class="form-field">
+                      <input class="form-control" type="text" name="expiry_dat" placeholder="Expiry Date...">
+                  </div>
+                  <div class="form-field">
+                      <input class="form-control" type="text" name="cvv" placeholder="CVV...">
+                  </div> -->
+                  {% if has_payment %}
+                    <p>Your preferred payment is set to card number: {{payment.card_number}}</p>
+                  {% else %}
+                    <p>Please update your payment details...</p>
+                  {% endif %}
+
+                  <a class="btn btn-outline-dark" style = "margin-top: 10px;" href="/edit_payment">Edit Payment Information</a>
               </div>
-             
-                <br>
-                <div id="payment-info">
-                    <p>Payment Information:</p>
-                    <hr>
-                    <div class="form-field">
-                        <input class="form-control" type="text" name="card_number" placeholder="Card Number...">
-                    </div>
-                    <div class="form-field">
-                        <input class="form-control" type="text" name="expiry_dat" placeholder="Expiry Date...">
-                    </div>
-                    <div class="form-field">
-                        <input class="form-control" type="text" name="cvv" placeholder="CVV...">
-                    </div>
-                </div>
- 
+
               <hr class="mb-4">
-              <button class="btn btn-primary btn-lg btn-block" type="submit">Place Order</button>
+              {% if not has_payment and has_address %}
+                <p style="color:grey;">Can't place order. Please select shipping and payment options.</p>
+              {% elif cart_items is 0 %}
+                <p style="color:grey;">Can't place order. No items in shopping cart.</p>
+              {% else %}
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Place Order</button>
+              {% endif %}
             </form>
         </div>
  

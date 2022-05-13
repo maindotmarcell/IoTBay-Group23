@@ -13,15 +13,23 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from django.http import JsonResponse
 import json
+from datetime import datetime
 
 
 # Create your views here.
 
+
 def home(request):
+    if request.user.is_authenticated:
+        return redirect("/welcome")
+
     return render(request, "main/home.html", {})
 
 
 def register(request):
+    if request.user.is_authenticated:
+        return redirect("/welcome")
+
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -35,7 +43,7 @@ def register(request):
 
 def welcome(request):
     if not request.user.is_authenticated:
-        return redirect('/home')
+        return redirect("/home")
 
     name = request.user.username
     # email = request.user.email
@@ -49,8 +57,8 @@ def welcome(request):
 
 def main(request):
     if not request.user.is_authenticated:
-        return redirect('/home')
-        
+        return redirect("/home")
+
     customer = request.user
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
     items = order.orderitem_set.all()
@@ -67,7 +75,7 @@ def logout(request):
 
 def edit(request):
     if not request.user.is_authenticated:
-        return redirect('/home')
+        return redirect("/home")
 
     if request.method == "POST":
         user_form = UpdateForm(request.POST, instance=request.user)
@@ -86,7 +94,7 @@ def edit(request):
 
 def edit_payment(request):
     if not request.user.is_authenticated:
-        return redirect('/home')
+        return redirect("/home")
 
     form = EditPaymentForm
     context = {"form": form}
@@ -119,14 +127,14 @@ def edit_payment(request):
 
 def delete_payment_confirmation(request):
     if not request.user.is_authenticated:
-        return redirect('/home')
+        return redirect("/home")
 
     return render(request, "Payment_Management/delete_payment_confirmation.html", {})
 
 
 def delete_payment(request):
     if not request.user.is_authenticated:
-        return redirect('/home')
+        return redirect("/home")
 
     if request.method == "POST":
         Payment.objects.filter(customer=request.user).delete()
@@ -136,7 +144,7 @@ def delete_payment(request):
 
 def edit_shippment(request):
     if not request.user.is_authenticated:
-        return redirect('/home')
+        return redirect("/home")
 
     form = EditAddressForm
     context = {"form": form}
@@ -177,32 +185,32 @@ def edit_shippment(request):
 
 def delete_shipping_confirmation(request):
     if not request.user.is_authenticated:
-        return redirect('/home')
+        return redirect("/home")
 
     return render(request, "Shippment_Management/delete_shipping_confirmation.html", {})
 
 
 def delete_shipping(request):
     if not request.user.is_authenticated:
-        return redirect('/home')
+        return redirect("/home")
 
-    if request.method == 'POST':
+    if request.method == "POST":
         Shipping.objects.filter(user=request.user).delete()
-        return redirect('/delete_shipping_confirmation')
+        return redirect("/delete_shipping_confirmation")
     return render(request, "Shippment_Management/delete_shipping.html", {})
 
 
 def confirmation(request):
     if not request.user.is_authenticated:
-        return redirect('/home')
+        return redirect("/home")
 
     return render(request, "Delete_Account/confirmation.html", {})
 
 
 def DeleteAccount(request):
     if not request.user.is_authenticated:
-        return redirect('/home')
-        
+        return redirect("/home")
+
     if request.method == "POST":
         delete_form = DeleteUserForm(request.POST, instance=request.user)
         request.user.delete()
@@ -217,7 +225,7 @@ def DeleteAccount(request):
 
 def cart(request):
     if not request.user.is_authenticated:
-        return redirect('/home')
+        return redirect("/home")
 
     customer = request.user
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
@@ -236,13 +244,28 @@ def cart(request):
 class CheckoutView(View):
     def get(self, *args, **kwargs):
         if not self.request.user.is_authenticated:
-            return redirect('/home')
+            return redirect("/home")
 
         form = AddressForm()
-        order_items = OrderItem.objects.all()
         order, created = Order.objects.get_or_create(
             customer=self.request.user, complete=False
         )
+        order_items = order.orderitem_set.all()
+
+        try:
+            payment = Payment.objects.get(customer=self.request.user)
+            has_payment = True
+        except:
+            payment = None
+            has_payment = False
+
+        try:
+            shipping = Shipping.objects.get(user=self.request.user)
+            has_address = True
+        except:
+            shipping = None
+            has_address = False
+
         cart_items = order.get_cart_items
         cart_total = order.get_cart_total
         context = {
@@ -250,45 +273,50 @@ class CheckoutView(View):
             "items": order_items,
             "cart_items": cart_items,
             "cart_total": cart_total,
+            "payment": payment,
+            "has_payment": has_payment,
+            "shipping": shipping,
+            "has_address": has_address,
         }
         return render(self.request, "Order_Management/checkout.html", context)
 
     def post(self, *args, **kwargs):
         if not self.request.user.is_authenticated:
-            return redirect('/home')
-        form = AddressForm(self.request.POST or None)
+            return redirect("/home")
         order, created = Order.objects.get_or_create(
             customer=self.request.user, complete=False
         )
         # order, created = Order.objects.get_or_create(customer=customer, complete=False)
         # order = Order.objects.get(user=self.request.user, ordered=False)
-        if form.is_valid():
-            street_address = form.cleaned_data.get("street_address")
-            city = form.cleaned_data.get("city")
-            postcode = form.cleaned_data.get("postcode")
-            country = form.cleaned_data.get("country")
-            state = form.cleaned_data.get("state")
-            shipping_method = form.cleaned_data.get("shipping_method")
+        # if form.is_valid():
+        #     street_address = form.cleaned_data.get("street_address")
+        #     city = form.cleaned_data.get("city")
+        #     postcode = form.cleaned_data.get("postcode")
+        #     country = form.cleaned_data.get("country")
+        #     state = form.cleaned_data.get("state")
+        #     shipping_method = form.cleaned_data.get("shipping_method")
 
-        address = Shipping(
-            user=self.request.user,
-            street_address=street_address,
-            city=city,
-            postcode=postcode,
-            country=country,
-            state=state,
-            shipping_method=shipping_method,
-        )
-        address.save()
-        order.complete = True;
+        # address = Shipping(
+        #     user=self.request.user,
+        #     street_address=street_address,
+        #     city=city,
+        #     postcode=postcode,
+        #     country=country,
+        #     state=state,
+        #     shipping_method=shipping_method,
+        # )
+        # address.save()
+        order.complete = True
+        order.date = datetime.now()
+        order.description = f"Order from {self.request.user.username}, on {str(order.date)}. For a total of ${order.get_cart_total}."
         order.save()
 
-        return render(self.request, "Order_Management/checkout.html")
+        return redirect('/order_history')
 
 
 def staff_registration(request):
     if not request.user.is_authenticated:
-        return redirect('/home')
+        return redirect("/home")
 
     if request.user.is_superuser:
         if request.method == "POST":
@@ -303,7 +331,7 @@ def staff_registration(request):
 
 def updateItem(request):
     if not request.user.is_authenticated:
-        return redirect('/home')
+        return redirect("/home")
 
     data = json.loads(request.body)
     productID = data["productID"]
@@ -332,7 +360,7 @@ def updateItem(request):
 
 def products(request):
     if not request.user.is_authenticated:
-        return redirect('/home')
+        return redirect("/home")
 
     if request.user.is_staff or request.user.is_superuser:
         items = Item.objects.all()
@@ -342,7 +370,7 @@ def products(request):
 
 def add_item(request):
     if not request.user.is_authenticated:
-        return redirect('/home')
+        return redirect("/home")
 
     if request.user.is_staff or request.user.is_superuser:
         if request.method == "POST":
@@ -360,7 +388,7 @@ def add_item(request):
 
 def view_item(request, pk):
     if not request.user.is_authenticated:
-        return redirect('/home')
+        return redirect("/home")
 
     if request.user.is_staff or request.user.is_superuser:
         item = get_object_or_404(Item, pk=pk)
@@ -370,7 +398,7 @@ def view_item(request, pk):
 
 def delete_item(request, pk):
     if not request.user.is_authenticated:
-        return redirect('/home')
+        return redirect("/home")
 
     if request.user.is_staff or request.user.is_superuser:
         item = get_object_or_404(Item, pk=pk)
@@ -380,7 +408,7 @@ def delete_item(request, pk):
 
 def update_item(request, pk):
     if not request.user.is_authenticated:
-        return redirect('/home')
+        return redirect("/home")
 
     if request.user.is_staff or request.user.is_superuser:
         item = get_object_or_404(Item, pk=pk)
@@ -399,3 +427,10 @@ def update_item(request, pk):
         return render(
             request, "Product_Management/update_item.html", {"form": updateForm}
         )
+
+
+def order_history(request):
+    if not request.user.is_authenticated:
+        return redirect("/home")
+
+    return render(request, "Order_Management/order_history.html")

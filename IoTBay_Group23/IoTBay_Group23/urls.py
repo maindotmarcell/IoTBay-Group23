@@ -40,6 +40,7 @@ urlpatterns = [
     path('delete_item/<int:pk>', v.delete_item, name="delete_item"),
     path('update_item/<int:pk>', v.update_item, name="update_item"),
     path('registration/', include('django.contrib.auth.urls')),
+    path('order_history/', v.order_history, name="order_history"),
 
 
     # update item json view

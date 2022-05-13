@@ -67,13 +67,6 @@ class Payment(models.Model):
         return str(self.id)
 
 
-class Invoice(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    payent = models.ForeignKey(Payment, on_delete=models.CASCADE)
-    invoice_number = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.invoice_number
 
 
 class Shipping(models.Model):
