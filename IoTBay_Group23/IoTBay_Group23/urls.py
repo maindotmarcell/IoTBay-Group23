@@ -34,6 +34,7 @@ urlpatterns = [
     path('deleteaccount/', v.DeleteAccount, name="deleteaccount"),
     path('cart/', v.cart, name="cart"),   
     path('checkout/', v.CheckoutView.as_view(), name="checkout"),
+    path('payment/', v.PaymentView.as_view(), name="payment"),
     path('products/', v.products, name="products"),
     path('add_item/', v.add_item, name="add_item"),
     path('view_item/<int:pk>', v.view_item, name="view_item"),

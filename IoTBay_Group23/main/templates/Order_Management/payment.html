@@ -1,0 +1,60 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+ 
+<main class="mt-5 pt-4">
+    <div class="row">
+        <div class="col-lg-6" style="border:1px solid black; padding: 10px; border-radius: 5px;">
+          <form class="card-body" method="POST">
+            {% csrf_token %}
+            <h>Payment Information:</h>
+            <div class="md-form mb-5">
+              <input type="text" name="name_on_card" id="name_on_card" class="form-control" placeholder="Name on Card..." required>
+              <input type="text" name="card_number" id="card_number" class="form-control" placeholder="Card Number..." required>
+              <input type="text" name="expiry_date" id="expiry_date" class="form-control" placeholder="Expiry Date..." required>
+              <input type="text" name="cvv" id="cvv" class="form-control" placeholder="CVV..." required>
+            </div>
+           
+            <h>Payment Options:</h>
+            <div class="d-block my-3">
+              <div class="custom-control custom-radio">
+                <input id="savings" value="S" name="payment_method" type="radio" class="custom-control-input">
+                <label class="custom-control-label" for="savings">Savings</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input id="cheque" value="C" name="payment_method" type="radio" class="custom-control-input">
+                <label class="custom-control-label" for="cheque">Cheque</label>
+              </div>
+            </div>
+ 
+            <hr class="mb-4">
+            <button class="btn btn-primary btn-lg btn-block" type="submit">Place Order</button>
+          </form>
+        </div>
+ 
+            <div class="col-lg-6" style="border:1px solid black; padding: 10px; border-radius: 5px;">
+                <div class="box-element" >
+                    <a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+                    <hr>
+                    <h3>Order Summary</h3>
+                    <hr>
+                    {% for order_item in items %}
+                    <div class="cart-row">
+                        <div style="flex:2"><img style="width: 100%; height: 200px" src="{{order_item.item.image.url}}"></div>
+                        <div style="flex:2"><p>{{order_item.item.name}}</p></div>
+                        <div style="flex:1"><p>${{order_item.item.price|floatformat:2}}</p></div>
+                        <div style="flex:1"><p>x{{order_item.quantity}}</p></div>
+                    </div>
+                    {% endfor %}
+                    <h5>Items:   2</h5>
+                    <h5>Total:   $40</h5>
+                </div>
+            </div>
+           
+          </div>
+        </div>
+</div>
+</main>
+ 
+{% endblock %}

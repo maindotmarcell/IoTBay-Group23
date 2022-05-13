@@ -23,6 +23,11 @@ SHIPPING_CHOICES = (
     ('E', 'Express')
 )
 
+PAYMENT_CHOICES = (
+    ('S', 'Savings'),
+    ('C', 'Cheque')
+)
+
 class Item(models.Model):
     name = models.CharField(max_length=100)
     stock_num = models.IntegerField()
@@ -56,13 +61,14 @@ class Order(models.Model):
 
 
 class Payment(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    customer = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    # order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     name_on_card = models.CharField(max_length=100)
     card_number = models.IntegerField(default=0000-0000-0000)
     expiry_date = models.DateTimeField(null=True)
     cvv = models.IntegerField(default=000)
-
+    payment_method = models.CharField(choices=PAYMENT_CHOICES, max_length=2, null=True)
+ 
     def __str__(self):
         return self.amount
 

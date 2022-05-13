@@ -9,6 +9,11 @@ SHIPPING_CHOICES = (
     ('E', 'Express')
 )
 
+PAYMENT_CHOICES = (
+    ('S', 'Savings'),
+    ('C', 'Cheque')
+)
+
 from django.forms import ModelForm
 from .models import Item
 
@@ -82,3 +87,10 @@ class AddressForm(forms.Form):
     country = forms.CharField()
     state = forms.CharField()
     shipping_method = forms.ChoiceField(widget=forms.RadioSelect(), choices=SHIPPING_CHOICES)
+
+class PaymentForm(forms.Form):
+    name_on_card = forms.CharField()
+    card_number = forms.IntegerField()
+    expiry_date = forms.DateTimeField
+    cvv = forms.IntegerField
+    paayment_method = forms.ChoiceField(widget=forms.RadioSelect(), choices=PAYMENT_CHOICES)

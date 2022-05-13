@@ -3,7 +3,6 @@ from .models import Item,Order,Payment, Invoice, Shipping
 # Register your models here.
 admin.site.register(Item)
 admin.site.register(Order)
-admin.site.register(Payment)
 admin.site.register(Invoice)
 
 class ShippingAdmin(admin.ModelAdmin):
@@ -21,4 +20,16 @@ class ShippingAdmin(admin.ModelAdmin):
     ]
  
 admin.site.register(Shipping, ShippingAdmin)
+
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = [
+        'user',
+        # 'order',
+        'name_on_card',
+        'expiry_date',
+        'cvv',
+        'payment_method',
+        ]
+ 
+admin.site.register(Payment, PaymentAdmin)
 

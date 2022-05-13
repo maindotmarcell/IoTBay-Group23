@@ -172,18 +172,50 @@ class CheckoutView(View):
             state = form.cleaned_data.get('state')
             shipping_method = form.cleaned_data.get('shipping_method')
  
-        address = Shipping(
-            user=self.request.user,
-            street_address=street_address,
-            city=city,
-            postcode=postcode,
-            country=country,
-            state=state,
-            shipping_method=shipping_method
-        )
-        address.save()
-        return render(self.request,"Order_Management/checkout.html")
+            address = Shipping(
+                user=self.request.user,
+                street_address=street_address,
+                city=city,
+                postcode=postcode,
+                country=country,
+                state=state,
+                shipping_method=shipping_method
+            )
+            address.save()
+        return render(self.request,"Order_Management/payment.html")
 
+class PaymentView(View):
+ 
+    def get(self, *args, **kwargs):
+        form = PaymentForm()
+        order_items = OrderItem.objects.all()
+        context = {
+            'form': form,
+            'items': order_items
+        }
+        return render(self.request,"Order_Management/payment.html", context)
+   
+def post(self, *args, **kwargs):
+        form = PaymentForm(self.request.POST or None)
+        # order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        # order = Order.objects.get(user=self.request.user, ordered=False)
+        if form.is_valid():
+            name_on_card = form.cleaned_data.get('name_on_card')
+            card_number = form.cleaned_data.get('card_number')
+            expiry_date = form.cleaned_data.get('expiry_date')
+            cvv = form.cleaned_data.get('cvv')
+            payment_method = form.cleaned_data.get('payment_method')
+ 
+            payment = Payment(
+                user=self.request.user,
+                name_on_card=name_on_card,
+                card_number=card_number,
+                expiry_date=expiry_date,
+                cvv=cvv,
+                payment_method=payment_method
+            )
+            payment.save()
+        return render(self.request,"Order_Management/payment.html")
 
 def staff_registration(request):
     if request.user.is_superuser:
