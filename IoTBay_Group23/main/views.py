@@ -16,9 +16,6 @@ import json
 
 
 # Create your views here.
-def index(request):
-    return render(request, "main/base.html", {})
-
 
 def home(request):
     return render(request, "main/home.html", {})
@@ -37,6 +34,9 @@ def register(request):
 
 
 def welcome(request):
+    if not request.user.is_authenticated:
+        return redirect('/home')
+
     name = request.user.username
     # email = request.user.email
     email = ""
@@ -48,6 +48,9 @@ def welcome(request):
 
 
 def main(request):
+    if not request.user.is_authenticated:
+        return redirect('/home')
+        
     customer = request.user
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
     items = order.orderitem_set.all()
@@ -63,6 +66,8 @@ def logout(request):
 
 
 def edit(request):
+    if not request.user.is_authenticated:
+        return redirect('/home')
 
     if request.method == "POST":
         user_form = UpdateForm(request.POST, instance=request.user)
@@ -80,6 +85,9 @@ def edit(request):
 
 
 def edit_payment(request):
+    if not request.user.is_authenticated:
+        return redirect('/home')
+
     form = EditPaymentForm
     context = {"form": form}
     if request.method == "POST":
@@ -110,10 +118,16 @@ def edit_payment(request):
 
 
 def delete_payment_confirmation(request):
+    if not request.user.is_authenticated:
+        return redirect('/home')
+
     return render(request, "Payment_Management/delete_payment_confirmation.html", {})
 
 
 def delete_payment(request):
+    if not request.user.is_authenticated:
+        return redirect('/home')
+
     if request.method == "POST":
         Payment.objects.filter(customer=request.user).delete()
         return redirect("/delete_payment_confirmation")
@@ -121,6 +135,9 @@ def delete_payment(request):
 
 
 def edit_shippment(request):
+    if not request.user.is_authenticated:
+        return redirect('/home')
+
     form = EditAddressForm
     context = {"form": form}
     if request.method == "POST":
@@ -159,10 +176,16 @@ def edit_shippment(request):
 
 
 def delete_shipping_confirmation(request):
+    if not request.user.is_authenticated:
+        return redirect('/home')
+
     return render(request, "Shippment_Management/delete_shipping_confirmation.html", {})
 
 
 def delete_shipping(request):
+    if not request.user.is_authenticated:
+        return redirect('/home')
+
     if request.method == 'POST':
         Shipping.objects.filter(user=request.user).delete()
         return redirect('/delete_shipping_confirmation')
@@ -170,10 +193,16 @@ def delete_shipping(request):
 
 
 def confirmation(request):
+    if not request.user.is_authenticated:
+        return redirect('/home')
+
     return render(request, "Delete_Account/confirmation.html", {})
 
 
 def DeleteAccount(request):
+    if not request.user.is_authenticated:
+        return redirect('/home')
+        
     if request.method == "POST":
         delete_form = DeleteUserForm(request.POST, instance=request.user)
         request.user.delete()
@@ -187,6 +216,9 @@ def DeleteAccount(request):
 
 
 def cart(request):
+    if not request.user.is_authenticated:
+        return redirect('/home')
+
     customer = request.user
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
     items = order.orderitem_set.all()
@@ -203,6 +235,9 @@ def cart(request):
 
 class CheckoutView(View):
     def get(self, *args, **kwargs):
+        if not self.request.user.is_authenticated:
+            return redirect('/home')
+
         form = AddressForm()
         order_items = OrderItem.objects.all()
         order, created = Order.objects.get_or_create(
@@ -219,7 +254,12 @@ class CheckoutView(View):
         return render(self.request, "Order_Management/checkout.html", context)
 
     def post(self, *args, **kwargs):
+        if not self.request.user.is_authenticated:
+            return redirect('/home')
         form = AddressForm(self.request.POST or None)
+        order, created = Order.objects.get_or_create(
+            customer=self.request.user, complete=False
+        )
         # order, created = Order.objects.get_or_create(customer=customer, complete=False)
         # order = Order.objects.get(user=self.request.user, ordered=False)
         if form.is_valid():
@@ -240,10 +280,16 @@ class CheckoutView(View):
             shipping_method=shipping_method,
         )
         address.save()
+        order.complete = True;
+        order.save()
+
         return render(self.request, "Order_Management/checkout.html")
 
 
 def staff_registration(request):
+    if not request.user.is_authenticated:
+        return redirect('/home')
+
     if request.user.is_superuser:
         if request.method == "POST":
             form = StaffForm(request.POST)
@@ -256,6 +302,9 @@ def staff_registration(request):
 
 
 def updateItem(request):
+    if not request.user.is_authenticated:
+        return redirect('/home')
+
     data = json.loads(request.body)
     productID = data["productID"]
     action = data["action"]
@@ -282,6 +331,9 @@ def updateItem(request):
 
 
 def products(request):
+    if not request.user.is_authenticated:
+        return redirect('/home')
+
     if request.user.is_staff or request.user.is_superuser:
         items = Item.objects.all()
         context = {"items": items}
@@ -289,6 +341,9 @@ def products(request):
 
 
 def add_item(request):
+    if not request.user.is_authenticated:
+        return redirect('/home')
+
     if request.user.is_staff or request.user.is_superuser:
         if request.method == "POST":
             add_form = AddItemForm(request.POST, request.FILES)
@@ -304,6 +359,9 @@ def add_item(request):
 
 
 def view_item(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('/home')
+
     if request.user.is_staff or request.user.is_superuser:
         item = get_object_or_404(Item, pk=pk)
         context = {"item": item}
@@ -311,6 +369,9 @@ def view_item(request, pk):
 
 
 def delete_item(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('/home')
+
     if request.user.is_staff or request.user.is_superuser:
         item = get_object_or_404(Item, pk=pk)
         item.delete()
@@ -318,6 +379,9 @@ def delete_item(request, pk):
 
 
 def update_item(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('/home')
+
     if request.user.is_staff or request.user.is_superuser:
         item = get_object_or_404(Item, pk=pk)
         if request.method == "POST":
