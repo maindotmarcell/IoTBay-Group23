@@ -94,6 +94,8 @@ def edit_payment(request):
             customer=request.user, complete=False
         )
 
+        Payment.objects.filter(customer=request.user).delete()
+
         payment = Payment(
             order=order,
             customer=request.user,
@@ -112,6 +114,9 @@ def delete_payment_confirmation(request):
 
 
 def delete_payment(request):
+    if request.method == "POST":
+        Payment.objects.filter(customer=request.user).delete()
+        return redirect("/delete_payment_confirmation")
     return render(request, "Payment_Management/delete_payment.html", {})
 
 
@@ -132,6 +137,8 @@ def edit_shippment(request):
         order, created = Order.objects.get_or_create(
             customer=request.user, complete=False
         )
+
+        Shipping.objects.filter(user=request.user).delete()
 
         shipping = Shipping(
             street_address=street_address,
@@ -156,6 +163,9 @@ def delete_shipping_confirmation(request):
 
 
 def delete_shipping(request):
+    if request.method == 'POST':
+        Shipping.objects.filter(user=request.user).delete()
+        return redirect('/delete_shipping_confirmation')
     return render(request, "Shippment_Management/delete_shipping.html", {})
 
 

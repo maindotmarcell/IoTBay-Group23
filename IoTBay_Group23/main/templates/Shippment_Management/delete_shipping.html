@@ -2,6 +2,7 @@
 {% block title %}Delete Payment Details{% endblock %}
 {% load crispy_forms_tags %}
 
+{% block content%}
 <h3>Are you sure you want to delete your Shipping Information?</h3>
 <br>
     <form method="POST" class="form-group">
@@ -11,4 +12,4 @@
         <a class = "btn btn-success" href = "/welcome">Cancel</a>
     </form>
 
-{% block content %}
+{% endblock %}
