@@ -34,8 +34,11 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             new_user = form.save()
-            new_user = authenticate(username=form.cleaned_data['username'],password=form.cleaned_data['password1'])
-            login(request,new_user)
+            new_user = authenticate(
+                username=form.cleaned_data["username"],
+                password=form.cleaned_data["password1"],
+            )
+            login(request, new_user)
             return redirect("/welcome")
     else:
         form = RegisterForm()
@@ -185,8 +188,8 @@ def edit_shippment(request):
             input_valid = 1
         else:
             input_valid = 0
-    
-    context = {"form": form,"input_valid": input_valid}
+
+    context = {"form": form, "input_valid": input_valid}
     return render(
         request,
         "Shippment_Management/edit_shippment.html",
@@ -297,32 +300,12 @@ class CheckoutView(View):
         order, created = Order.objects.get_or_create(
             customer=self.request.user, complete=False
         )
-        # order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        # order = Order.objects.get(user=self.request.user, ordered=False)
-        # if form.is_valid():
-        #     street_address = form.cleaned_data.get("street_address")
-        #     city = form.cleaned_data.get("city")
-        #     postcode = form.cleaned_data.get("postcode")
-        #     country = form.cleaned_data.get("country")
-        #     state = form.cleaned_data.get("state")
-        #     shipping_method = form.cleaned_data.get("shipping_method")
-
-        # address = Shipping(
-        #     user=self.request.user,
-        #     street_address=street_address,
-        #     city=city,
-        #     postcode=postcode,
-        #     country=country,
-        #     state=state,
-        #     shipping_method=shipping_method,
-        # )
-        # address.save()
         order.complete = True
         order.date = datetime.now()
-        order.description = f"Order from {self.request.user.username}, on {str(order.date)}. For a total of ${order.get_cart_total}."
+        order.description = f"Order from {self.request.user.username}, on {str(order.date)}. For a total of ${order.get_cart_total}. With card number: {self.request.user.payment_set.get(customer=self.request.user).card_number}. To address: {self.request.user.shipping_set.get(user=self.request.user).street_address}."
         order.save()
 
-        return redirect('/order_history')
+        return redirect("/order_history")
 
 
 def staff_registration(request):
@@ -444,7 +427,7 @@ def order_history(request):
     if not request.user.is_authenticated:
         return redirect("/home")
 
-    orders = Order.objects.filter(customer=request.user,complete=True)
+    orders = Order.objects.filter(customer=request.user, complete=True)
     context = {"orders": orders}
     return render(request, "Order_Management/order_history.html", context)
 
@@ -452,6 +435,5 @@ def order_history(request):
 def edit_nav(request):
     if not request.user.is_authenticated:
         return redirect("/home")
-    
-    return render(request,"main/edit_nav.html")
 
+    return render(request, "main/edit_nav.html")
