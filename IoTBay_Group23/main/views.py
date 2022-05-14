@@ -33,8 +33,10 @@ def register(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect("/login")
+            new_user = form.save()
+            new_user = authenticate(username=form.cleaned_data['username'],password=form.cleaned_data['password1'])
+            login(request,new_user)
+            return redirect("/welcome")
     else:
         form = RegisterForm()
 
