@@ -97,7 +97,7 @@ def edit_payment(request):
         return redirect("/home")
 
     form = EditPaymentForm
-    context = {"form": form}
+    input_valid = 1
     if request.method == "POST":
         form = EditPaymentForm(request.POST)
         if form.is_valid():
@@ -106,22 +106,26 @@ def edit_payment(request):
             expiry_date = form.cleaned_data.get("expiry_date")
             cvv = form.cleaned_data.get("cvv")
 
-        order, created = Order.objects.get_or_create(
-            customer=request.user, complete=False
-        )
+            order, created = Order.objects.get_or_create(
+                customer=request.user, complete=False
+            )
 
-        Payment.objects.filter(customer=request.user).delete()
+            Payment.objects.filter(customer=request.user).delete()
 
-        payment = Payment(
-            order=order,
-            customer=request.user,
-            name_on_card=name_on_card,
-            card_number=card_number,
-            expiry_date=expiry_date,
-            cvv=cvv,
-        )
-        payment.save()
+            payment = Payment(
+                order=order,
+                customer=request.user,
+                name_on_card=name_on_card,
+                card_number=card_number,
+                expiry_date=expiry_date,
+                cvv=cvv,
+            )
+            payment.save()
+            input_valid = 1
+        else:
+            input_valid = 0
 
+    context = {"form": form, "input_valid": input_valid}
     return render(request, "Payment_Management/edit_payment.html", context)
 
 
@@ -147,7 +151,7 @@ def edit_shippment(request):
         return redirect("/home")
 
     form = EditAddressForm
-    context = {"form": form}
+    input_valid = 1
     if request.method == "POST":
         form = EditAddressForm(request.POST)
         if form.is_valid():
@@ -159,23 +163,28 @@ def edit_shippment(request):
             date = form.cleaned_data.get("date")
             shipping_method = form.cleaned_data.get("shipping_method")
 
-        order, created = Order.objects.get_or_create(
-            customer=request.user, complete=False
-        )
+            order, created = Order.objects.get_or_create(
+                customer=request.user, complete=False
+            )
 
-        Shipping.objects.filter(user=request.user).delete()
+            Shipping.objects.filter(user=request.user).delete()
 
-        shipping = Shipping(
-            street_address=street_address,
-            user=request.user,
-            city=city,
-            postcode=postcode,
-            country=country,
-            state=state,
-            date=date,
-            shipping_method=shipping_method,
-        )
-        shipping.save()
+            shipping = Shipping(
+                street_address=street_address,
+                user=request.user,
+                city=city,
+                postcode=postcode,
+                country=country,
+                state=state,
+                date=date,
+                shipping_method=shipping_method,
+            )
+            shipping.save()
+            input_valid = 1
+        else:
+            input_valid = 0
+    
+    context = {"form": form,"input_valid": input_valid}
     return render(
         request,
         "Shippment_Management/edit_shippment.html",
@@ -433,4 +442,14 @@ def order_history(request):
     if not request.user.is_authenticated:
         return redirect("/home")
 
-    return render(request, "Order_Management/order_history.html")
+    orders = Order.objects.filter(customer=request.user,complete=True)
+    context = {"orders": orders}
+    return render(request, "Order_Management/order_history.html", context)
+
+
+def edit_nav(request):
+    if not request.user.is_authenticated:
+        return redirect("/home")
+    
+    return render(request,"main/edit_nav.html")
+

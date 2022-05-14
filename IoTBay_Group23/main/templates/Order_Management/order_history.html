@@ -1,5 +1,10 @@
-{% extends 'main/base.html' %}
-{% load static %}
-{% block content %}
+{% extends 'main/base.html' %} {% load static %} {% block content %}
 <h1>Order History</h1>
+<table style="border: black 2px solid">
+	{% for order in orders %}
+	<tr>
+		<td style="border: black 1px solid">{{order.description}}</td>
+	</tr>
+	{% endfor %}
+</table>
 {% endblock %}

@@ -9,25 +9,6 @@
             <form class="card-body" method="POST">
               {% csrf_token %}
               <p><strong>Shipping Information:</strong></p>
-              <!-- <div class="md-form mb-5">
-                <input type="text" name="street_address" id="street_address" class="form-control" placeholder="Street Addrress..." required>
-                <input type="text" name="city" id="city" class="form-control" placeholder="City..." required>
-                <input type="text" name="state" id="state" class="form-control" placeholder="State..." required>
-                <input type="text" name="postcode" id="postcode" class="form-control" placeholder="Postcode..." required>
-                <input type="text" name="country" id="country" class="form-control" placeholder="Country..." required>
-              </div>
-             
-              <h>Shipping Options:</h>
-              <div class="d-block my-3">
-                <div class="custom-control custom-radio">
-                  <input id="standard" value="S" name="shipping_method" type="radio" class="custom-control-input">
-                  <label class="custom-control-label" for="standard">Standard</label>
-                </div>
-                <div class="custom-control custom-radio">
-                  <input id="express" value="E" name="shipping_method" type="radio" class="custom-control-input">
-                  <label class="custom-control-label" for="express">Express</label>
-                </div>
-              </div> -->
               {% if has_address %}
                 <p>Your preferred shipping address is:</p>
                 <p>{{shipping.street_address}}</p>
@@ -44,16 +25,6 @@
               <hr>
               <div id="payment-info">
                   <p><strong>Payment Information:</strong></p>
-                  <!-- <hr>
-                  <div class="form-field">
-                      <input class="form-control" type="text" name="card_number" placeholder="Card Number...">
-                  </div>
-                  <div class="form-field">
-                      <input class="form-control" type="text" name="expiry_dat" placeholder="Expiry Date...">
-                  </div>
-                  <div class="form-field">
-                      <input class="form-control" type="text" name="cvv" placeholder="CVV...">
-                  </div> -->
                   {% if has_payment %}
                     <p>Your preferred payment is set to card number: {{payment.card_number}}</p>
                   {% else %}

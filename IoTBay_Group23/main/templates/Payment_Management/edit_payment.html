@@ -9,6 +9,9 @@
     <fieldset>
         {% crispy form %}
         <br>
+        {% if input_valid is 0 %}
+            <p style="color:red;">The details you enter are not valid. Please try again with correct input.</p>
+        {% endif %}
         <input type="submit" style = "margin-top: 30px;" class="btn btn-success">
         <a class = 'btn btn-danger' style = "margin-top: 30px;" href = "/delete_payment">Delete Payment Details</a>
         <a class="btn btn-outline-dark" style = "margin-top: 30px;" href="/welcome">Cancel</a>
