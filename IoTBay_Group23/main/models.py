@@ -5,20 +5,6 @@ from datetime import datetime
 
 # Create your models here.
 
-# Customer is a proxy class to the built in User object, this gives us the convenience of the bult in authentication functions, but gives us the flexibility to add our 
-# class Customer(models.Model):
-#     # name = models.CharField(max_length=200)
-#     # password = models.CharField(max_length=40)
-#     # email = models.EmailField(verbose_name="email", max_length=60, unique=True)
-#     # username = models.CharField(max_length=30, unique=True)
-#     # date_joined = models.DateTimeField(verbose_name="date joined", auto_now_true=True)
-#     # last_login = models.DateTimeField(verbose_name="last login", auto_now=True)
-#     # is_admin = models.BooleanField(default=False)
-#     # is_active = models.BooleanField(default=True)
-#     # is_staff = models.BooleanField(default=False)
-#     # is_superuser = models.BooleanField(default=False)
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
 SHIPPING_CHOICES = (
     ('S', 'Standard'),
     ('E', 'Express')

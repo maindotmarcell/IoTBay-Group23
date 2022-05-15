@@ -9,6 +9,12 @@
     <fieldset>
         {% crispy form %}
         <br>
+        {% if input_valid is 0 %}
+            <p style="color:red;">The details you've enterred are not valid. Please try again with correct input. 😰</p>
+        {% elif input_valid is 2 %}
+            <p style="color:green;">Your shipping preferences have been updated successfully! 😇</p>
+        {% endif %}
+        <br>
         <input type="submit" style = "margin-top: 30px;" class="btn btn-success">
         <a class = 'btn btn-danger' style = "margin-top: 30px;" href = "/delete_shipping">Delete Shipping Details</a>
         <a class="btn btn-outline-dark" style = "margin-top: 30px;" href="/welcome">Cancel</a>

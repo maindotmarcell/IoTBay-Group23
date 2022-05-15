@@ -126,7 +126,7 @@ def edit_payment(request):
                 cvv=cvv,
             )
             payment.save()
-            input_valid = 1
+            input_valid = 2
         else:
             input_valid = 0
 
@@ -185,7 +185,7 @@ def edit_shippment(request):
                 shipping_method=shipping_method,
             )
             shipping.save()
-            input_valid = 1
+            input_valid = 2
         else:
             input_valid = 0
 

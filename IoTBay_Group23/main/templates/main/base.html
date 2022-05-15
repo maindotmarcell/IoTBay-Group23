@@ -59,43 +59,76 @@
 		<style type="text/css">
 			.sidenav {
 				height: 100%;
-				width:160px;
+				width: 160px;
 				position: fixed;
 				z-index: 1;
 				top: 0;
 				left: 0;
-				background-color:#111;
+				background-color: #111;
 				overflow-x: hidden;
 				padding-top: 20px;
 			}
 
 			.sidenav a {
-				padding:6px 8px 6px 16px;
-				text-decoration:none;
-				font-size: 25px; 
+				padding: 6px 8px 6px 6px;
+				text-decoration: none;
+				font-size: 25px;
 				color: #818181;
-				display:block;
+				display: block;
 			}
 
 			.sidenav a:hover {
-				color:#f1f1f1;
+				color: #f1f1f1;
 			}
 			.main {
 				margin-left: 160px;
 				padding: 0px 10px;
 			}
+			/* Order history table */
+			.order-table {
+				border: 1px solid black;
+				border-radius: 25px;
+			}
+			.order-table tr td {
+				padding: 10px;
+			}
+			.order-table tr:nth-of-type(even) {
+				background-color: #f3f3f3;
+			}
 		</style>
 	</head>
 	<body>
 		<div class="sidenav">
-		{% if user.is_authenticated %}
-			<a class="btn btn-outline-dark" style="margin-top: 10px;" href="/welcome">Welcome</a>
-			<a class="btn btn-outline-dark" style="margin-top: 10px;" href="/main">Main</a>
-			<a class="btn btn-outline-dark" style="margin-top: 10px;" href="/cart">Cart</a>
-        	<a class="btn btn-outline-dark" style="margin-top: 10px;" href="/checkout">Checkout</a>
-        	<a class="btn btn-outline-dark" style="margin-top: 10px;" href="/account">Account</a>
-			<a class = 'btn-danger' style = "margin-top: 10px;color:black" href = "/logout">Logout</a>
-		{% endif %}
+			{% if user.is_authenticated %}
+				<a class="btn btn-outline-dark" style="margin-top: 10px" href="/welcome"
+					>Welcome 👋</a
+				>
+				<a class="btn btn-outline-dark" style="margin-top: 10px" href="/main"
+					>Shop 🔥</a
+				>
+				<a class="btn btn-outline-dark" style="margin-top: 10px" href="/order_history"
+					>Orders ✉️</a
+				>
+				<a class="btn btn-outline-dark" style="margin-top: 10px" href="/account"
+					>Account 🛠️</a
+				>
+				<a class="btn btn-outline-dark" style="margin-top: 10px" href="/cart"
+					>Cart 🛒</a
+				>
+				<a class="btn btn-outline-dark" style="margin-top: 10px" href="/checkout"
+					>Checkout ✅</a
+				>
+				<a
+					class="btn btn-danger"
+					style="margin-top: 10px; color: black"
+					href="/logout"
+					>Logout</a
+				>
+				{% if user.is_superuser %}
+					<a class = 'btn btn-success' style = "margin-top: 10px; color: black" href = "/admin">Admin Panel</a>
+				{% endif %}
+				
+			{% endif %}
 		</div>
 		<div id="content" , name="content" , class="main">
 			<div class="row justify-content-center">

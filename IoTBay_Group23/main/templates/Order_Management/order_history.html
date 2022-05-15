@@ -1,10 +1,12 @@
 {% extends 'main/base.html' %} {% load static %} {% block content %}
-<h1>Order History</h1>
-<table style="border: black 2px solid">
+<h1>Order History ✉️ </h1>
+<!-- styling can be found in base.html header -->
+<table class="order-table" > 
 	{% for order in orders %}
 	<tr>
-		<td style="border: black 1px solid">{{order.description}}</td>
+		<td >{{order.description}}</td>
 	</tr>
 	{% endfor %}
 </table>
 {% endblock %}
+<!--  style="border: black 1px solid"-->
