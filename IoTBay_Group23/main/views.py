@@ -434,7 +434,7 @@ def cancel_order(request):
 def search_orders(request):
     if request.method == "POST":
         searchbar = request.POST['searchbar']
-        order = Order.objects.filter(date__contains=searchbar)
+        order = Order.objects.filter(date__contains=searchbar, customer=request.user)
         return render(request, "Order_Management/search_orders.html",
         {'searchbar': searchbar, 'order': order})
     else:
