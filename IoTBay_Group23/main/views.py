@@ -47,9 +47,6 @@ def register(request):
 
 
 def welcome(request):
-    if not request.user.is_authenticated:
-        return redirect("/home")
-
     name = request.user.username
     # email = request.user.email
     email = ""
@@ -61,15 +58,12 @@ def welcome(request):
 
 
 def main(request):
-    if not request.user.is_authenticated:
-        return redirect("/home")
-
     customer = request.user
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
     items = order.orderitem_set.all()
     cartItems = order.get_cart_items
     products = Item.objects.all()
-    context = {"products": products, "cart_items": cartItems}
+    context = {"products": products, "cart_items": cartItems, "items": items}
     return render(request, "main/main.html", context)
 
 
@@ -79,9 +73,6 @@ def logout(request):
 
 
 def edit(request):
-    if not request.user.is_authenticated:
-        return redirect("/home")
-
     if request.method == "POST":
         user_form = UpdateForm(request.POST, instance=request.user)
         if user_form.is_valid():
@@ -98,9 +89,6 @@ def edit(request):
 
 
 def edit_payment(request):
-    if not request.user.is_authenticated:
-        return redirect("/home")
-
     form = EditPaymentForm
     input_valid = 1
     if request.method == "POST":
@@ -135,16 +123,10 @@ def edit_payment(request):
 
 
 def delete_payment_confirmation(request):
-    if not request.user.is_authenticated:
-        return redirect("/home")
-
     return render(request, "Payment_Management/delete_payment_confirmation.html", {})
 
 
 def delete_payment(request):
-    if not request.user.is_authenticated:
-        return redirect("/home")
-
     if request.method == "POST":
         Payment.objects.filter(customer=request.user).delete()
         return redirect("/delete_payment_confirmation")
@@ -152,9 +134,6 @@ def delete_payment(request):
 
 
 def edit_shippment(request):
-    if not request.user.is_authenticated:
-        return redirect("/home")
-
     form = EditAddressForm
     input_valid = 1
     if request.method == "POST":
@@ -198,16 +177,10 @@ def edit_shippment(request):
 
 
 def delete_shipping_confirmation(request):
-    if not request.user.is_authenticated:
-        return redirect("/home")
-
     return render(request, "Shippment_Management/delete_shipping_confirmation.html", {})
 
 
 def delete_shipping(request):
-    if not request.user.is_authenticated:
-        return redirect("/home")
-
     if request.method == "POST":
         Shipping.objects.filter(user=request.user).delete()
         return redirect("/delete_shipping_confirmation")
@@ -215,16 +188,10 @@ def delete_shipping(request):
 
 
 def confirmation(request):
-    if not request.user.is_authenticated:
-        return redirect("/home")
-
     return render(request, "Delete_Account/confirmation.html", {})
 
 
 def DeleteAccount(request):
-    if not request.user.is_authenticated:
-        return redirect("/home")
-
     if request.method == "POST":
         delete_form = DeleteUserForm(request.POST, instance=request.user)
         request.user.delete()
@@ -238,9 +205,6 @@ def DeleteAccount(request):
 
 
 def cart(request):
-    if not request.user.is_authenticated:
-        return redirect("/home")
-
     customer = request.user
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
     items = order.orderitem_set.all()
@@ -252,13 +216,15 @@ def cart(request):
         "cart_items": cartItems,
         "cart_total": cartTotal,
     }
+    # cancelling order
+    if request.method == 'POST':
+        order.orderitem_set.all().delete()
+
     return render(request, "Order_Management/cart.html", context)
 
 
 class CheckoutView(View):
     def get(self, *args, **kwargs):
-        if not self.request.user.is_authenticated:
-            return redirect("/home")
 
         form = AddressForm()
         order, created = Order.objects.get_or_create(
@@ -282,6 +248,7 @@ class CheckoutView(View):
 
         cart_items = order.get_cart_items
         cart_total = order.get_cart_total
+        stock_error = False
         context = {
             "form": form,
             "items": order_items,
@@ -291,27 +258,69 @@ class CheckoutView(View):
             "has_payment": has_payment,
             "shipping": shipping,
             "has_address": has_address,
+            "stock_error": stock_error,
+            "error_item": ''
         }
         return render(self.request, "Order_Management/checkout.html", context)
 
     def post(self, *args, **kwargs):
-        if not self.request.user.is_authenticated:
-            return redirect("/home")
+        form = AddressForm()
         order, created = Order.objects.get_or_create(
             customer=self.request.user, complete=False
         )
+        order_items = order.orderitem_set.all()
+
+        try:
+            payment = Payment.objects.get(customer=self.request.user)
+            has_payment = True
+        except:
+            payment = None
+            has_payment = False
+
+        try:
+            shipping = Shipping.objects.get(user=self.request.user)
+            has_address = True
+        except:
+            shipping = None
+            has_address = False
+
+        cart_items = order.get_cart_items
+        cart_total = order.get_cart_total
+        stock_error = False
+        context = {
+            "form": form,
+            "items": order_items,
+            "cart_items": cart_items,
+            "cart_total": cart_total,
+            "payment": payment,
+            "has_payment": has_payment,
+            "shipping": shipping,
+            "has_address": has_address,
+            "stock_error": stock_error,
+            "error_item": ''
+        }
+        order, created = Order.objects.get_or_create(
+            customer=self.request.user, complete=False
+        )
+        order_items = order.orderitem_set.all()
+        for item in order_items:
+            stock = Item.objects.get(name=item.item.name)
+            stock.stock_num = stock.stock_num - item.quantity
+            if (stock.stock_num < 0):
+                context["stock_error"] = True
+                context["error_item"] = stock.name
+                return render(self.request, "Order_Management/checkout.html",context)
+            stock.save()
+
         order.complete = True
         order.date = datetime.now()
-        order.description = f"Order from {self.request.user.username}, on {str(order.date)}. For a total of ${order.get_cart_total}. With card number: {self.request.user.payment_set.get(customer=self.request.user).card_number}. To address: {self.request.user.shipping_set.get(user=self.request.user).street_address}."
+        order.description = f"Order {order.id} from {self.request.user.username}, on {str(order.date)}. For a total of ${order.get_cart_total}. With card number: {self.request.user.payment_set.get(customer=self.request.user).card_number}. To address: {self.request.user.shipping_set.get(user=self.request.user).street_address}."
         order.save()
 
         return redirect("/order_history")
 
 
 def staff_registration(request):
-    if not request.user.is_authenticated:
-        return redirect("/home")
-
     if request.user.is_superuser:
         if request.method == "POST":
             form = StaffForm(request.POST)
@@ -324,8 +333,6 @@ def staff_registration(request):
 
 
 def updateItem(request):
-    if not request.user.is_authenticated:
-        return redirect("/home")
 
     data = json.loads(request.body)
     productID = data["productID"]
@@ -353,9 +360,6 @@ def updateItem(request):
 
 
 def products(request):
-    if not request.user.is_authenticated:
-        return redirect("/home")
-
     if request.user.is_staff or request.user.is_superuser:
         items = Item.objects.all()
         context = {"items": items}
@@ -363,9 +367,6 @@ def products(request):
 
 
 def add_item(request):
-    if not request.user.is_authenticated:
-        return redirect("/home")
-
     if request.user.is_staff or request.user.is_superuser:
         if request.method == "POST":
             add_form = AddItemForm(request.POST, request.FILES)
@@ -381,9 +382,6 @@ def add_item(request):
 
 
 def view_item(request, pk):
-    if not request.user.is_authenticated:
-        return redirect("/home")
-
     if request.user.is_staff or request.user.is_superuser:
         item = get_object_or_404(Item, pk=pk)
         context = {"item": item}
@@ -391,9 +389,6 @@ def view_item(request, pk):
 
 
 def delete_item(request, pk):
-    if not request.user.is_authenticated:
-        return redirect("/home")
-
     if request.user.is_staff or request.user.is_superuser:
         item = get_object_or_404(Item, pk=pk)
         item.delete()
@@ -401,9 +396,6 @@ def delete_item(request, pk):
 
 
 def update_item(request, pk):
-    if not request.user.is_authenticated:
-        return redirect("/home")
-
     if request.user.is_staff or request.user.is_superuser:
         item = get_object_or_404(Item, pk=pk)
         if request.method == "POST":
@@ -424,16 +416,17 @@ def update_item(request, pk):
 
 
 def order_history(request):
-    if not request.user.is_authenticated:
-        return redirect("/home")
-
     orders = Order.objects.filter(customer=request.user, complete=True)
     context = {"orders": orders}
     return render(request, "Order_Management/order_history.html", context)
 
 
 def edit_nav(request):
-    if not request.user.is_authenticated:
-        return redirect("/home")
-
     return render(request, "main/edit_nav.html")
+
+
+def cancel_order(request):
+    order, created = Order.objects.get_or_create(customer=request.user, complete=False)
+    order.orderitem_set.all().delete()
+    return redirect("/main")
+

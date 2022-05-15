@@ -42,6 +42,7 @@ urlpatterns = [
     path('registration/', include('django.contrib.auth.urls')),
     path('order_history/', v.order_history, name="order_history"),
     path('account/', v.edit_nav, name="account"),
+    path('cancel_order/', v.cancel_order, name="cancel_order"),
 
 
     # update item json view
