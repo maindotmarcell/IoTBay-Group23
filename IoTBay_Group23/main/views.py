@@ -430,3 +430,13 @@ def cancel_order(request):
     order.orderitem_set.all().delete()
     return redirect("/main")
 
+
+def search_orders(request):
+    if request.method == "POST":
+        searchbar = request.POST['searchbar']
+        order = Order.objects.filter(date__contains=searchbar)
+        return render(request, "Order_Management/search_orders.html",
+        {'searchbar': searchbar, 'order': order})
+    else:
+        return render(request, "Order_Management/search_orders.html",
+        {})

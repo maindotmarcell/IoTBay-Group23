@@ -1,0 +1,26 @@
+{% extends 'main/base.html' %} {% load static %} {% block content %}
+<h1>Orders by Date </h1>
+<br>
+<!-- styling can be found in base.html header -->
+ 
+<form class="d-flex" method=POST action="{% url 'search_orders' %}">
+   
+    {% csrf_token %}
+ 
+    <br>
+    <input class="form-control me-2" type="search" placeholder="Search: YYYY-MM-DD" aria-label="Search" name="searchbar">
+    <button class="btn btn-outline-secondary" type="submit">Search</button>
+    <br>
+ 
+    {% if searchbar %}
+ 
+        {% for order in order %}
+        <br>{{ order }} - {{ order.description }}<br>
+        {% endfor %}
+ 
+    {% endif %}
+ 
+</form>
+ 
+{% endblock %}
+<!--  style="border: black 1px solid"-->

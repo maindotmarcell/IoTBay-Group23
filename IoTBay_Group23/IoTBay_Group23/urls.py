@@ -36,6 +36,7 @@ urlpatterns = [
     path('checkout/', v.CheckoutView.as_view(), name="checkout"),
     path('products/', v.products, name="products"),
     path('add_item/', v.add_item, name="add_item"),
+    path('search_orders/', v.search_orders, name="search_orders"),
     path('view_item/<int:pk>', v.view_item, name="view_item"),
     path('delete_item/<int:pk>', v.delete_item, name="delete_item"),
     path('update_item/<int:pk>', v.update_item, name="update_item"),
